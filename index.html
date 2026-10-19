@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Portafolio personal de Matheo Yepez">
+  <title>Portafolio 🥭</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;600;700;800&family=Nunito+Sans:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <header class="barra-superior" aria-label="Navegación decorativa">
+    <div class="cinta" aria-hidden="true">
+      <div class="cinta-contenido">
+        <span>PORTAFOLIO</span><span class="kaomoji"><span class="kao kao-a">〜(^∇^〜)</span><span class="kao kao-b">（〜^∇^)〜</span></span><span>PORTAFOLIO</span><span class="kaomoji"><span class="kao kao-a">〜(^∇^〜)</span><span class="kao kao-b">（〜^∇^)〜</span></span>
+        <span>PORTAFOLIO</span><span class="kaomoji"><span class="kao kao-a">〜(^∇^〜)</span><span class="kao kao-b">（〜^∇^)〜</span></span><span>PORTAFOLIO</span><span class="kaomoji"><span class="kao kao-a">〜(^∇^〜)</span><span class="kao kao-b">（〜^∇^)〜</span></span>
+      </div>
+      <div class="cinta-contenido" aria-hidden="true">
+        <span>PORTAFOLIO</span><span class="kaomoji"><span class="kao kao-a">〜(^∇^〜)</span><span class="kao kao-b">（〜^∇^)〜</span></span><span>PORTAFOLIO</span><span class="kaomoji"><span class="kao kao-a">〜(^∇^〜)</span><span class="kao kao-b">（〜^∇^)〜</span></span>
+        <span>PORTAFOLIO</span><span class="kaomoji"><span class="kao kao-a">〜(^∇^〜)</span><span class="kao kao-b">（〜^∇^)〜</span></span><span>PORTAFOLIO</span><span class="kaomoji"><span class="kao kao-a">〜(^∇^〜)</span><span class="kao kao-b">（〜^∇^)〜</span></span>
+      </div>
+    </div>
+  </header>
+  <!-- ==================== INICIO SECCIÓN 1 ==================== -->
+  <main class="portada" aria-label="Presentación de Matheo Yepez">
+    <img class="fondo" src="imagenes/Fondo.svg" alt="" aria-hidden="true">
+    <img class="alas" src="imagenes/Alas.svg" alt="" aria-hidden="true">
+    <img class="disco" src="imagenes/Disco.svg" alt="" aria-hidden="true">
+    <img class="nombre" src="imagenes/Nombre.svg" alt="Matheo Yepez">
+    <img class="hoja" src="imagenes/Sticker_Hoja.svg" alt="" aria-hidden="true">
+    <img class="mango" src="imagenes/Sticker_Mango.svg" alt="" aria-hidden="true">
+    <div class="marco-personaje" id="personaje" tabindex="0" role="img" aria-label="Ilustración animada de Matheo">
+      <div class="animacion-lottie" aria-hidden="true"></div>
+    </div>
+    <section class="presentacion" aria-label="Sobre mí">
+      <p id="texto-presentacion"></p>
+      <span id="texto-original" hidden>
+        ¡Hola, Mi nombre es Matheo! Soy un técnico de producción de multimedia, apasionado por los videojuegos, la ilustración y la animación.
+      </span>
+    </section>
+    <section class="reproductor" aria-label="Reproductor musical">
+      <div class="reproductor-barra">
+        <button id="musica-anterior" class="control-lateral"
+          type="button" aria-label="Canción anterior">
+          <svg viewBox="0 0 100 70" aria-hidden="true">
+            <path d="M48 3 L3 35 L48 67 L48 48 L91 67 L91 3 L48 22 Z"/>
+          </svg>
+        </button>
+        <button id="musica-play" class="control-central"
+          type="button" aria-label="Reproducir">
+          <img class="icono-play" src="imagenes/Play.png" alt="">
+          <img class="icono-pausa" src="imagenes/Pausa.png" alt="" hidden>
+        </button>
+        <button id="musica-siguiente" class="control-lateral"
+          type="button" aria-label="Canción siguiente">
+          <svg viewBox="0 0 100 70" aria-hidden="true">
+            <path d="M52 3 L97 35 L52 67 L52 48 L9 67 L9 3 L52 22 Z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="volumen-contenedor">
+        <input
+          id="musica-volumen"
+          class="volumen-barra"
+          type="range"
+          min="0"
+          max="100"
+          value="50"
+          aria-label="Volumen"
+        />
+      </div>
+      <p id="musica-cancion" class="musica-cancion">
+        Título de la canción
+      </p>
+      <p id="musica-estado" class="musica-estado"
+        role="status" aria-live="polite">
+        Preparando música...
+      </p>
+    </section>
+    <a class="indicacion" href="#siguiente">
+      <span>¿Quieres saber más sobre mí?</span>
+      <span class="ripple-wave">¡Sigue Deslizando!</span>
+      <svg viewBox="0 0 32 42" aria-hidden="true"><path d="M16 2v31M5 23l11 12 11-12" /></svg>
+    </a>
+  </main>
+  <!-- ==================== FIN SECCIÓN 1 ==================== -->
+  <!-- ==================== INICIO SECCIÓN 2 ==================== -->
+  <section id="seccion-dos" class="seccion-dos" aria-label="Sobre mí y mi formación">
+    <!-- Fondo de nubes: tamaño original, ancho completo -->
+    <img
+      class="fondo-nube-negra"
+      src="imagenes/Fondo Nube Negra.svg"
+      alt=""
+      aria-hidden="true"
+    />
+    <!-- Decoración superior -->
+    <img
+      class="estrella-seccion"
+      src="imagenes/Estrella.svg"
+      alt=""
+      aria-hidden="true"
+    />
+    <img
+      class="kaomoji-seccion"
+      src="imagenes/Kaomoji.svg"
+      alt=""
+      aria-hidden="true"
+    />
+    <!-- Cuadro SOBRE MÍ -->
+    <article class="cuadro-sobre-mi">
+      <img
+        class="marco-sobre-mi"
+        src="imagenes/Cuadro SM.svg"
+        alt=""
+        aria-hidden="true"
+      />
+      <div class="contenido-sobre-mi">
+        <img
+          class="titulo-sobre-mi"
+          src="imagenes/Sobre Mi.svg"
+          alt="Sobre mí"
+        />
+        <p class="texto-sobre-mi">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Sed diam nonummy nibh euismod tincidunt ut laoreet dolore
+          magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
+          quis nostrud exerci tation ullamcorper suscipit lobortis nisl
+          ut aliquip ex ea commodo consequat. Duis autem vel eum iriure
+          dolor in hendrerit in vulputate velit esse molestie consequat.
+        </p>
+      </div>
+    </article>
+    <!-- Celular animado (Celular.json) -->
+    <div class="tableta-contenedor">
+      <div id="tableta-lottie" class="tableta-animacion"></div>
+    </div>
+    <!-- Formación e historia -->
+    <article class="historia-formacion" aria-label="¿Dónde adquirí mis conocimientos?">
+      <img
+        class="barra-busqueda"
+        src="imagenes/Barra Busqueda.svg"
+        alt=""
+        aria-hidden="true"
+      />
+      <div
+        id="historias-lista"
+        class="historias-lista"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <p class="historia-texto" data-historia="0">
+          De pequeño, solía ver youtubers de arte digital que me
+          inspiraban para mis dibujos; recreaba sus obras y seguía
+          sus consejos desde donde podía: <span class="ripple-wave">mis cuadernos</span>.
+          Pero siempre aspiré a tener sus mismas habilidades y materiales
+          de arte, al menos cuando fuera mayor.
+        </p>
+        <p class="historia-texto" data-historia="1" hidden>
+          Fue entonces, a mis 15 años, que logré comprar mi primera
+          (y actual) tableta gráfica, con los ahorros que llevaba
+          haciendo por años. A partir de ahí comencé a
+          <span class="ripple-wave">digitalizar mis dibujos de forma autónoma</span>,
+          aunque siguiendo uno que otro tutorial.
+        </p>
+        <p class="historia-texto" data-historia="2" hidden>
+          Más tarde, en la escuela, se me dio la oportunidad de hacer la
+          <span class="ripple-wave">Técnica en Integración de Contenidos Digitales (2023 - 2024)</span>,
+          en donde perfeccioné mis habilidades de dibujo y adquirí nuevas,
+          como el uso de la Suite de Adobe y plataformas de creación de
+          páginas web como Wix.
+        </p>
+        <p class="historia-texto" data-historia="3" hidden>
+          Una vez graduado de bachillerato, decidí continuar con mis
+          estudios con el <span class="ripple-wave">SENA</span>, encadenándome
+          al programa de
+          <span class="ripple-wave">Tecnólogo en Producción de Multimedia (2025-2027)</span>,
+          donde estoy aprendiendo cada vez más: modelado 3D, marketing
+          digital, maquetación web y muchas habilidades más.
+        </p>
+      </div>
+      <nav class="historias-controles" aria-label="Seleccionar historia">
+        <button type="button" data-ir-historia="0"
+          aria-label="Mostrar historia 1" aria-pressed="true"></button>
+        <button type="button" data-ir-historia="1"
+          aria-label="Mostrar historia 2" aria-pressed="false"></button>
+        <button type="button" data-ir-historia="2"
+          aria-label="Mostrar historia 3" aria-pressed="false"></button>
+        <button type="button" data-ir-historia="3"
+          aria-label="Mostrar historia 4" aria-pressed="false"></button>
+      </nav>
+    </article>
+    <!-- Cursor decorativo flotante -->
+    <img
+      id="cursor-decorativo"
+      class="cursor-decorativo"
+      src="imagenes/Cursor.svg"
+      alt=""
+      aria-hidden="true"
+    />
+    <!-- Lápiz: vive aquí para poder quedar por encima de las nubes
+         y del fondo verde de la sección 3 sin que nada lo recorte -->
+    <img
+      class="lapiz-union"
+      src="imagenes/Lapiz.svg"
+      alt=""
+      aria-hidden="true"
+    />
+  </section>
+  <!-- ==================== FIN SECCIÓN 2 ==================== -->
+  <div id="siguiente" class="siguiente" aria-hidden="true"></div>
+  <!-- ==================== INICIO SECCIÓN 3 ==================== -->
+  <section id="seccion-tres" class="seccion-tres" aria-label="Software">
+    <!-- Fondo completo de la sección -->
+    <img
+      class="software-fondo"
+      src="imagenes/Fondo 3.svg"
+      alt=""
+      aria-hidden="true"
+    />
+    <!-- Título -->
+    <img
+      class="software-titulo"
+      src="imagenes/Titulo 3.svg"
+      alt="Software"
+    />
+    <!-- Estrella pequeña -->
+    <img
+      class="software-estrella software-estrella-pequena"
+      src="imagenes/Estrella 2.svg"
+      alt=""
+      aria-hidden="true"
+    />
+    <!-- Estrella grande: misma imagen, tamaño y giro diferentes -->
+    <img
+      class="software-estrella software-estrella-grande"
+      src="imagenes/Estrella 2.svg"
+      alt=""
+      aria-hidden="true"
+    />
+    <!-- Grupo de círculos superior derecho -->
+    <img
+      class="software-circulos software-circulos-uno"
+      src="imagenes/Circulo.svg"
+      alt=""
+      aria-hidden="true"
+    />
+    <!-- Grupo de círculos inferior izquierdo -->
+    <img
+      class="software-circulos software-circulos-dos"
+      src="imagenes/Circulo 2.svg"
+      alt=""
+      aria-hidden="true"
+    />
+    <!-- Tableta gráfica -->
+    <img
+      class="software-tableta"
+      src="imagenes/Tableta G.svg"
+      alt=""
+      aria-hidden="true"
+    />
+    <!-- TABLERO INTERACTIVO: TABLAS, HILOS Y PINES -->
+    <div id="tablero-tablas" class="tablero-tablas">
+      <!-- Tabla Adobe -->
+      <img
+        id="tabla-adobe"
+        class="tabla-arrastrable tabla-adobe"
+        src="imagenes/Tabla Adobe.svg"
+        alt="Tabla de Adobe"
+        draggable="false"
+        tabindex="0"
+      />
+      <!-- Tabla Arte -->
+      <img
+        id="tabla-arte"
+        class="tabla-arrastrable tabla-arte"
+        src="imagenes/Tabla Arte.svg"
+        alt="Tabla de arte"
+        draggable="false"
+        tabindex="0"
+      />
+      <!-- Tabla Otros -->
+      <img
+        id="tabla-otros"
+        class="tabla-arrastrable tabla-otros"
+        src="imagenes/Tabla Otros.svg"
+        alt="Tabla de otras herramientas"
+        draggable="false"
+        tabindex="0"
+      />
+      <!-- Iconos de aplicaciones: cada uno vive pegado a su tabla (data-tabla),
+           pero con su propio movimiento y brillo.
+           data-x / data-y = centro dentro de la tabla (0 a 1) · data-w = ancho como fracción
+           del ancho de la tabla · data-giro = giro propio en grados -->
+      <div
+        class="icono-app"
+        data-tabla="adobe"
+        data-x="0.288" data-y="0.131" data-w="0.442" data-giro="4.5"
+        data-brillo="#f5a533"
+      >
+        <img class="icono-base" src="imagenes/Icon AI.svg" alt="Adobe Illustrator" draggable="false" />
+      </div>
+      <div
+        class="icono-app"
+        data-tabla="adobe"
+        data-x="0.724" data-y="0.384" data-w="0.444" data-giro="9.6"
+        data-brillo="#38b0ff"
+      >
+        <img class="icono-base" src="imagenes/Icon Ps.svg" alt="Adobe Photoshop" draggable="false" />
+      </div>
+      <div
+        class="icono-app"
+        data-tabla="adobe"
+        data-x="0.176" data-y="0.618" data-w="0.445" data-giro="-5.2"
+        data-brillo="#a59cff"
+      >
+        <img class="icono-base" src="imagenes/Icon Ae.svg" alt="Adobe After Effects" draggable="false" />
+      </div>
+      <div
+        class="icono-app"
+        data-tabla="adobe"
+        data-x="0.721" data-y="0.846" data-w="0.445" data-giro="9.4"
+        data-brillo="#a59cff"
+      >
+        <img class="icono-base" src="imagenes/Icon Pr.svg" alt="Adobe Premiere Pro" draggable="false" />
+      </div>
+      <div
+        class="icono-app"
+        data-tabla="arte"
+        data-x="0.297" data-y="0.304" data-w="0.404" data-giro="-4" data-aspecto="1.0919"
+        data-brillo="#ee5a86"
+      >
+        <img class="icono-base" src="imagenes/Icon Sai.svg" alt="PaintTool SAI" draggable="false" />
+      </div>
+      <div
+        class="icono-app"
+        data-tabla="arte"
+        data-x="0.764" data-y="0.477" data-w="0.360" data-giro="-5.5"
+        data-brillo="#e4e4e4"
+      >
+        <img class="icono-base" src="imagenes/Icon CSP.svg" alt="Clip Studio Paint" draggable="false" />
+      </div>
+      <div
+        class="icono-app"
+        data-tabla="arte"
+        data-x="0.384" data-y="0.827" data-w="0.427" data-giro="-3" data-aspecto="1.0517"
+        data-brillo="#8fe03f"
+      >
+        <img class="icono-base" src="imagenes/Icon Krita.svg" alt="Krita" draggable="false" />
+      </div>
+      <div
+        class="icono-app"
+        data-tabla="otros"
+        data-x="0.239" data-y="0.637" data-w="0.534" data-giro="0" data-aspecto="1.1267"
+        data-brillo="#ff8a2b"
+      >
+        <img class="icono-base" src="imagenes/Icon Blender.svg" alt="Blender" draggable="false" />
+      </div>
+      <div
+        class="icono-app"
+        data-tabla="otros"
+        data-x="0.702" data-y="0.266" data-w="0.505" data-giro="0"
+        data-brillo="#4aa0f0"
+      >
+        <img class="icono-base" src="imagenes/Icon WP.svg" alt="WordPress" draggable="false" />
+      </div>
+      <!-- Hilos y pines: van DESPUÉS de las tablas para dibujarse por encima de ellas -->
+      <svg
+        class="tablero-conexiones"
+        id="tablero-conexiones"
+        aria-hidden="true"
+      >
+        <g class="tablero-hilos">
+          <line id="hilo-adobe-arte" />
+          <line id="hilo-adobe-otros" />
+          <line id="hilo-arte-otros" />
+        </g>
+        <g class="tablero-pines">
+          <circle id="pin-adobe" />
+          <circle id="pin-arte" />
+          <circle id="pin-otros" />
+          <circle class="pin-brillo" id="brillo-adobe" />
+          <circle class="pin-brillo" id="brillo-arte" />
+          <circle class="pin-brillo" id="brillo-otros" />
+        </g>
+      </svg>
+    </div>
+    <!-- FIN TABLERO INTERACTIVO -->
+  </section>
+  <!-- ==================== FIN SECCIÓN 3 ==================== -->
+  <!-- ==================== INICIO SECCIÓN 4 ==================== -->
+  <section id="seccion-cuatro" class="seccion-cuatro" aria-label="Proyectos">
+    <div class="proyectos-escena">
+      <!-- Todo lo que hay dentro de este grupo flota junto con el tablero -->
+      <div class="proyectos-tablero" id="proyectos-tablero">
+        <img
+          class="proyectos-titulo"
+          src="imagenes/Proyectos.svg"
+          alt="Proyectos"
+        />
+        <!-- Tablero 980 x 775 (cámbialo por tu archivo) -->
+        <img
+          class="tablero-fondo"
+          src="imagenes/Tablero Corcho.svg"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="proyectos-colores"
+          src="imagenes/Colores.svg"
+          alt=""
+          aria-hidden="true"
+        />
+        <!-- Aquí JS dibuja el proyecto activo: logo, fotos, hoja e iconos -->
+        <div id="proyecto-contenido" class="proyecto-contenido"></div>
+        <img
+          class="proyectos-rata"
+          src="imagenes/Rata.svg"
+          alt=""
+          aria-hidden="true"
+        />
+      </div>
+      <button id="proyecto-anterior" class="flecha flecha-anterior"
+        type="button" aria-label="Proyecto anterior">
+        <img src="imagenes/Flecha.svg" alt="" draggable="false">
+      </button>
+      <button id="proyecto-siguiente" class="flecha flecha-siguiente"
+        type="button" aria-label="Proyecto siguiente">
+        <img src="imagenes/Flecha.svg" alt="" draggable="false">
+      </button>
+    </div>
+    <p id="proyecto-estado" class="solo-lectura" role="status" aria-live="polite"></p>
+  </section>
+  <!-- ==================== FIN SECCIÓN 4 ==================== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+  <script src="interacciones.js"></script>
+</body>
+</html>

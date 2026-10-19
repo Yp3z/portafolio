@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 246.1 246.1">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #277caa;
+        font-family: Coolvetica-Regular, Coolvetica;
+        font-size: 170px;
+      }
+
+      .cls-2 {
+        letter-spacing: 0em;
+      }
+
+      .cls-3 {
+        fill: #ece1c9;
+      }
+
+      .cls-4 {
+        fill: #342c22;
+      }
+    </style>
+  </defs>
+  <path class="cls-3" d="M195.33,245.88c-1.67.15-3.36.22-5.04.22l-134.66-.1c-14.87-.01-28.85-5.81-39.35-16.33C5.77,219.14-.01,205.16,0,190.29L.1,55.63c.01-13.99,5.23-27.36,14.7-37.65C24.2,7.76,36.97,1.45,50.76.22,52.43.07,54.13,0,55.81,0l134.66.1c14.87.01,28.85,5.81,39.35,16.33,10.51,10.52,16.29,24.51,16.28,39.38l-.1,134.66c-.01,13.99-5.23,27.36-14.7,37.65-9.41,10.22-22.18,16.53-35.97,17.76Z"/>
+  <rect class="cls-4" x="10.05" y="10.05" width="226" height="226" rx="45.67" ry="45.67"/>
+  <text class="cls-1" transform="translate(38.38 184.54)"><tspan class="cls-2" x="0" y="0">P</tspan><tspan x="89.08" y="0">s</tspan></text>
+</svg>

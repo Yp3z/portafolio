@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1610.78 1396.13">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #4d3f34;
+      }
+
+      .cls-3 {
+        fill: #2667a7;
+      }
+
+      .cls-4 {
+        fill: none;
+      }
+
+      .cls-5 {
+        isolation: isolate;
+      }
+
+      .cls-6 {
+        fill: url(#New_Pattern_Swatch_5);
+        mix-blend-mode: luminosity;
+        opacity: .15;
+      }
+
+      .cls-7 {
+        fill: #026580;
+      }
+
+      .cls-2 {
+        font-family: Coolvetica-Regular, Coolvetica;
+        font-size: 47.49px;
+      }
+
+      .cls-8 {
+        fill: #342c22;
+      }
+
+      .cls-9 {
+        clip-path: url(#clippath);
+      }
+
+      .cls-10 {
+        fill: #fcc152;
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="cls-4" x="553.78" width="1057" height="1318"/>
+    </clipPath>
+    <pattern id="New_Pattern_Swatch_5" data-name="New Pattern Swatch 5" x="0" y="0" width="61.1" height="61.1" patternTransform="translate(-1751.1698 -1867.602) scale(.6972 .7189)" patternUnits="userSpaceOnUse" viewBox="0 0 61.1 61.1">
+      <g>
+        <rect class="cls-4" width="61.1" height="61.1"/>
+        <g>
+          <rect class="cls-7" x="30.55" y="45.82" width="30.55" height="30.55"/>
+          <path class="cls-10" d="M48.3,61.1c0-1.37-1.11-2.47-2.47-2.47s-2.47,1.11-2.47,2.47,1.11,2.47,2.47,2.47,2.47-1.11,2.47-2.47Z"/>
+        </g>
+        <g>
+          <rect class="cls-7" y="45.82" width="30.55" height="30.55"/>
+          <circle class="cls-10" cx="15.27" cy="61.1" r="2.47"/>
+        </g>
+        <g>
+          <rect class="cls-7" x="45.82" y="15.27" width="30.55" height="30.55"/>
+          <circle class="cls-10" cx="61.1" cy="30.55" r="2.47"/>
+        </g>
+        <g>
+          <rect class="cls-7" x="15.27" y="15.27" width="30.55" height="30.55"/>
+          <circle class="cls-10" cx="30.55" cy="30.55" r="2.47"/>
+        </g>
+        <g>
+          <rect class="cls-7" x="-15.27" y="15.27" width="30.55" height="30.55"/>
+          <circle class="cls-10" cx="0" cy="30.55" r="2.47"/>
+        </g>
+        <g>
+          <rect class="cls-7" x="30.55" y="-15.27" width="30.55" height="30.55"/>
+          <path class="cls-10" d="M48.3,0c0-1.37-1.11-2.47-2.47-2.47s-2.47,1.11-2.47,2.47,1.11,2.47,2.47,2.47,2.47-1.11,2.47-2.47Z"/>
+        </g>
+        <g>
+          <rect class="cls-7" y="-15.27" width="30.55" height="30.55"/>
+          <circle class="cls-10" cx="15.27" r="2.47"/>
+        </g>
+      </g>
+    </pattern>
+  </defs>
+  <g class="cls-5">
+    <g id="Capa_1" data-name="Capa 1">
+      <g class="cls-9">
+        <g>
+          <g>
+            <g>
+              <rect class="cls-8" x="98.05" y="285.79" width="1326" height="902.82" rx="93.3" ry="93.3" transform="translate(383.64 -252.86) rotate(25.05)"/>
+              <rect class="cls-8" x="850.32" y="265.67" width="225.17" height="76.69" transform="translate(219.24 -379.04) rotate(25.05)"/>
+              <text class="cls-2" transform="translate(905.28 293.92) rotate(25.05)"><tspan x="0" y="0">THEO</tspan></text>
+              <rect class="cls-1" x="386.01" y="380.51" width="1032.5" height="107.36" rx="53.68" ry="53.68" transform="translate(268.64 -341.13) rotate(25.05)"/>
+            </g>
+            <rect class="cls-8" x="632.71" y="236.55" width="20.22" height="128.97" transform="translate(187.88 -243.82) rotate(25.05)"/>
+            <rect class="cls-8" x="1133.9" y="494.6" width="20.22" height="128.97" transform="translate(344.24 -431.73) rotate(25.05)"/>
+            <rect class="cls-8" x="945.68" y="406.65" width="20.22" height="128.97" transform="translate(289.32 -360.32) rotate(25.05)"/>
+            <rect class="cls-8" x="828.83" y="352.05" width="20.22" height="128.97" transform="translate(255.22 -315.98) rotate(25.05)"/>
+            <rect class="cls-3" x="899.42" y="373.53" width="59.26" height="13.25" transform="translate(248.28 -357.55) rotate(25.05)"/>
+          </g>
+          <polygon class="cls-6" points="1100.88 1325.76 70.72 844.41 333.69 281.64 1363.84 763 1100.88 1325.76"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

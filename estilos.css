@@ -1,0 +1,1223 @@
+@font-face {
+  font-family: "Coolvetica";
+  src: url("fuentes/Coolvetica-Rg.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+:root {
+  --negro: #342b22;
+  --blanco: #ede1c9;
+  --verde: #66663a;
+  --marron: #965c32;
+  --fuente-principal: "Coolvetica", "Roboto Condensed", "Arial Narrow", sans-serif;
+  --fuente-kaomoji: "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--negro);
+  background: var(--blanco);
+  font-family: var(--fuente-principal);
+  overflow-x: clip;
+}
+.barra-superior {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  height: 50px;
+  overflow: hidden;
+  color: #c9b9a9;
+  background: var(--negro);
+}
+.cinta {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  animation: recorrer 48s linear infinite;
+  will-change: transform;
+}
+.cinta-contenido {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: clamp(64px, 9vw, 130px);
+  min-width: 100vw;
+  padding: 0 clamp(64px, 9vw, 130px) 0 0;
+  white-space: nowrap;
+  font-size: 16px;
+  font-weight: 700;
+}
+.kaomoji {
+  color: var(--blanco);
+  font-family: var(--fuente-kaomoji);
+  font-size: 13px;
+  font-weight: 700;
+  position: relative;
+  display: inline-block;
+  min-width: 8.8em;
+  height: 1.3em;
+  vertical-align: middle;
+}
+.kaomoji .kao { position: absolute; inset: 0; color: var(--verde); white-space: nowrap; }
+.kaomoji .kao-b { animation: cambiar-kaomoji 1.2s steps(1, end) infinite; }
+.kaomoji .kao-a { animation: cambiar-kaomoji-inverso 1.2s steps(1, end) infinite; }
+/* ==================== SECCIÓN 1 ==================== */
+.portada {
+  position: relative;
+  height: auto;
+  min-height: 170vh;
+  overflow: visible;
+}
+.fondo {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  animation: aparecer .9s ease both;
+}
+.alas {
+  position: absolute;
+  z-index: 1;
+  width: 25%;
+  left: 70%;
+  top: 2%;
+  opacity: .96;
+  animation: aparecer .8s .1s both;
+}
+.disco {
+  position: absolute;
+  z-index: 1;
+  width: 30%;
+  left: -1.5%;
+  top: 50%;
+  transform-origin: 50% 50%;
+  animation: aparecer .8s .15s both, girar 3.0s linear infinite, expandir-disco 1.0s ease-in-out infinite;
+}
+.nombre {
+  position: absolute;
+  z-index: 3;
+  width: 43%;
+  left: 10%;
+  top: 17.5%;
+  animation: aparecer .8s .2s both, flotar 5s .9s ease-in-out infinite;
+}
+.hoja {
+  position: absolute;
+  z-index: 4;
+  width: 10.5%;
+  left: 7%;
+  top: 9%;
+  transform-origin: 50% 70%;
+  animation: aparecer .8s .25s both, flotar-hoja 4.8s .9s ease-in-out infinite;
+}
+.mango {
+  position: absolute;
+  z-index: 8;
+  width: 10%;
+  left: 48%;
+  top: 36%;
+  transform-origin: 50% 65%;
+  animation: aparecer .8s .3s both, flotar-mango 4.8s .9s ease-in-out infinite;
+}
+.marco-personaje {
+  position: absolute;
+  z-index: 5;
+  width: 50%;
+  left: 48.5%;
+  top: 2%;
+  aspect-ratio: 1042 / 1067;
+  transform-origin: center;
+  animation: aparecer .9s .35s both, flotar-personaje 5.5s 1.3s ease-in-out infinite;
+  cursor: pointer;
+  outline-offset: 4px;
+}
+.animacion-lottie {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.animacion-lottie svg { display: block; width: 100%; height: 100%; }
+.presentacion {
+  position: absolute;
+  z-index: 6;
+  left: 17.3%;
+  top: 45%;
+  width: 30%;
+  padding: 20px 15px;
+  border: 4px solid var(--verde);
+  border-radius: 20px;
+  background: var(--blanco);
+  animation: aparecer .8s .45s both, flotar-suave 6s 1.3s ease-in-out infinite;
+}
+.presentacion p {
+  margin: 0;
+  font-family: var(--fuente-principal);
+  font-size: clamp(16px, 1.4vw, 14px);
+  line-height: 1.12;
+  font-weight: 700;
+  text-align: justify;
+  text-align-last: center;
+  hyphens: auto;
+}
+.indicacion {
+  position: absolute;
+  z-index: 7;
+  left: 50%;
+  top: 65%;
+  width: max-content;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  transform: translateX(-50%);
+  color: var(--negro);
+  text-decoration: none;
+  font-family: var(--fuente-principal);
+  font-size: clamp(25px, 1.5vw, 16px);
+  line-height: 1.1;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 2px 2px var(--blanco), -1px -1px var(--blanco), 1px -1px var(--blanco), -1px 1px var(--blanco);
+  animation: aparecer .8s .55s both;
+}
+.indicacion svg {
+  width: 29px;
+  height: 36px;
+  fill: none;
+  stroke: var(--negro);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(1px 1px var(--blanco));
+  animation: flecha 1.8s ease-in-out infinite;
+}
+.siguiente { height: 1px; }
+#texto-presentacion {
+  color: #342B22;
+  overflow-wrap: break-word;
+}
+.letra-popcorn {
+  display: inline-block;
+  color: #342B22;
+  will-change: transform, opacity;
+}
+/* ---------- Reproductor ---------- */
+.reproductor {
+  --negro: #342B22;
+  --crema: #EDE1C9;
+  --verde: #66663A;
+  width: min(100%, 200px);
+  margin: 25px auto;
+  color: var(--negro);
+  font-family: "Coolvetica", "Segoe UI", sans-serif;
+  text-align: center;
+}
+.reproductor-barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 8px;
+  width: 100%;
+  height: 40px;
+  padding: 0 18px;
+  box-sizing: border-box;
+  background: var(--verde);
+  border-radius: 60px;
+}
+/*
+  CORRECCIÓN DEL FONDO BLANCO:
+  Los <button> traen un fondo gris/blanco por defecto del navegador.
+  Solo .control-lateral lo anulaba; el botón central (Play/Pausa) no,
+  y por eso su icono transparente se veía sobre un recuadro blanco.
+  Ahora todos los botones del reproductor quedan sin fondo.
+*/
+.reproductor button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  transition: transform 0.18s ease;
+}
+.reproductor button:hover:not(:disabled) {
+  transform: scale(1.06);
+}
+.control-lateral {
+  width: 30px;
+  height: 30px;
+  color: var(--crema);
+  background: transparent;
+}
+.control-lateral svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+.control-central {
+  background: transparent;
+}
+.control-central .icono-play,
+.control-central .icono-pausa {
+  display: block;
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  background: transparent;
+}
+.control-central img[hidden] {
+  display: none !important;
+}
+.reproductor button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+/* Barra de volumen compacta */
+.volumen-contenedor {
+  width: 80%;
+  margin: 25px auto 0;
+}
+.volumen-barra {
+  display: block;
+  width: 100%;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background: transparent;
+  touch-action: pan-y;
+}
+.volumen-barra::-webkit-slider-runnable-track {
+  height: 10px;
+  border-radius: 20px;
+  background: var(--negro);
+}
+.volumen-barra::-moz-range-track {
+  height: 13px;
+  border-radius: 20px;
+  background: var(--crema);
+}
+.volumen-barra::-webkit-slider-thumb {
+  width: 25px;
+  height: 25px;
+  margin-top: -6px;
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  border-radius: 50%;
+  background: var(--verde);
+}
+.volumen-barra::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border: none;
+  border-radius: 50%;
+  background: var(--negro);
+}
+.volumen-barra:focus-visible {
+  outline: 2px solid var(--verde);
+  outline-offset: 5px;
+}
+.musica-cancion {
+  margin: 9px 0 0;
+  color: var(--verde);
+  font-family: "Segoe UI", sans-serif;
+  font-size: clamp(16px, 3vw, 21px);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.musica-estado {
+  margin: 4px 0;
+  font-size: 12px;
+  color: var(--negro);
+}
+@media (max-width: 380px) {
+  .reproductor-barra {
+    height: 72px;
+    padding: 0 12px;
+    gap: 4px;
+  }
+  .control-central {
+    width: 100px;
+    height: 100px;
+    margin: 0 4px;
+  }
+  .control-lateral {
+    width: 35px;
+    height: 32px;
+  }
+  .control-central svg {
+    width: 34px;
+    height: 34px;
+  }
+}
+/* ==================== SECCIÓN 2 ====================
+   Todo se coloca con porcentajes del propio ancho/alto de la sección
+   (nada de vh ni de left/right en px), así la composición escala igual
+   que una imagen en cualquier pantalla.
+   Variables para afinar sin tocar el resto:
+   --solape-nubes : cuánto se mete el fondo de nubes sobre el inicio de la sección 3
+   --giro-sobre-mi: inclinación del título y del texto dentro del cuadro
+*/
+:root {
+  --marron: #8e5b30;
+  --solape-nubes: 11vw;
+  --giro-sobre-mi: -7deg;
+}
+/* La portada queda por encima de las nubes (el disco continúa sobre ellas) */
+.portada {
+  z-index: 3;
+  overflow: visible;
+}
+/* La sección NO crea contexto de apilamiento: sus hijos se ordenan
+   directamente con las secciones 1 y 3 */
+.seccion-dos {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: clip;      /* evita scroll horizontal por el celular que se sale a la izquierda */
+  overflow-y: visible;   /* el lápiz sigue pudiendo sobresalir hacia abajo */
+}
+/* Fondo de nubes: ancho completo, alto automático (sin deformar ni recortar).
+   Es el único elemento "en flujo", así que define el alto de la sección. */
+.fondo-nube-negra {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  pointer-events: none;
+  user-select: none;
+}
+/* ---------- Decoración superior ---------- */
+.estrella-seccion {
+  position: absolute;
+  z-index: 5;
+  top: -39%;
+  left: 71%;
+  width: 26%;
+  height: auto;
+  pointer-events: none;
+  animation: aparecer .8s .25s both, flotar-hoja 4.8s .9s ease-in-out infinite;
+}
+.kaomoji-seccion {
+  position: absolute;
+  z-index: 5;
+  top: -28%;
+  left: 62%;
+  width: 12%;
+  height: auto;
+  pointer-events: none;
+  animation: aparecer .8s .2s both, flotar 5s .9s ease-in-out infinite;
+}
+/* ---------- Cuadro "Sobre mí" ---------- */
+.cuadro-sobre-mi {
+  position: absolute;
+  z-index: 5;
+  top: -21%;
+  left: 24.5%;
+  width: 54%;
+  aspect-ratio: 222 / 155;
+  margin: 0;
+  padding: 0;
+}
+.marco-sobre-mi {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+/* Título + texto agrupados e inclinados como en la referencia */
+.contenido-sobre-mi {
+  position: absolute;
+  inset: 11% 7% 12% 7%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3%;
+  transform: rotate(var(--giro-sobre-mi));
+}
+.titulo-sobre-mi {
+  display: block;
+  width: 68%;
+  height: auto;
+  margin: 0;
+}
+.texto-sobre-mi {
+  margin: 0;
+  font-family: var(--fuente-principal);
+  font-size: max(10px, 1.4vw);
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: justify;
+  text-align-last: center;
+  color: var(--negro);
+}
+/* ---------- Tableta animada ---------- */
+.tableta-contenedor {
+  position: absolute;
+  z-index: 4;
+  top: 15%;
+  left: -18%;      /* metido un poco hacia fuera de la pantalla, a la izquierda */
+  width: 70%;     /* % del ancho de la sección: escala igual en cualquier pantalla */
+}
+.tableta-animada {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+/* ---------- Búsqueda + historias ---------- */
+.historia-formacion {
+  position: absolute;
+  z-index: 4;
+  top: 38.5%;
+  left: 47%;
+  width: 46.5%;
+  margin: 0;
+  padding: 0;
+}
+.barra-busqueda {
+  display: block;
+  width: 100%;
+  height: auto;
+  animation: flotar 3s ease-in-out infinite;
+}
+.historias-lista {
+  position: relative;
+  min-height: 7.6em;
+  margin: 1.6vw 0 0;
+  padding: 0 5% 0 7%;
+  font-size: max(10px, 1.45vw);
+}
+.historia-texto {
+  margin: 0;
+  color: var(--blanco);
+  font-family: var(--fuente-principal);
+  font-size: 1em;
+  line-height: 1.2;
+  text-align: center;
+  text-wrap: pretty;
+}
+.historia-texto[hidden] {
+  display: none;
+}
+.ripple-wave {
+  display: inline;
+  color: var(--marron);
+  font-weight: 700;
+}
+/* Indicadores manuales */
+.historias-controles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: max(6px, 0.8vw);
+  width: fit-content;
+  margin: 0.8vw auto 0;
+  padding: max(5px, 0.55vw) max(8px, 0.9vw);
+  border-radius: 30px;
+  background: var(--blanco);
+}
+.historias-controles button {
+  width: clamp(8px, 1vw, 22px);
+  height: clamp(8px, 1vw, 22px);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #a29b8a;
+  cursor: pointer;
+  transition: transform .2s ease, background-color .2s ease;
+}
+.historias-controles button[aria-pressed="true"] {
+  background: var(--verde);
+  transform: scale(1.15);
+}
+.historias-controles button:focus-visible {
+  outline: 2px solid var(--marron);
+  outline-offset: 3px;
+}
+/* Cursor decorativo: no reemplaza el cursor del sistema. */
+.cursor-decorativo {
+  position: absolute;
+  z-index: 10;
+  top: 40%;
+  left: 50%;
+  width: max(32px, 3.2vw);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  transform-origin: 25% 15%;
+  will-change: transform, left, top;
+}
+/* Elementos que el cursor puede simular que toca. */
+.cuadro-sobre-mi,
+.tableta-contenedor,
+.historia-formacion,
+.estrella-seccion {
+  transform-origin: center;
+}
+/* ---------- Lápiz ----------
+   Se ancla al inicio de la sección 3 (donde empieza el verde), sube
+   8.5vw para tocar las nubes y queda por encima de ambos fondos. */
+.lapiz-union {
+  position: absolute;
+  z-index: 6;
+  top: calc(100% - var(--solape-nubes) - 8.5vw);
+  right: 2.5%;
+  width: 27%;
+  height: auto;
+  pointer-events: none;
+}
+/* ---------- Sección 2 en pantallas estrechas: composición apilada ---------- */
+@media (max-width: 650px) {
+  .seccion-dos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7vw;
+    padding: 34vw 5% 30vw;
+  }
+  /* En móvil el alto lo da el contenido; la nube cubre sin deformarse */
+  .fondo-nube-negra {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  .estrella-seccion { top: -12vw; left: auto; right: 3%; width: 24%; }
+  .kaomoji-seccion  { top: -6vw;  left: auto; right: 33%; width: 22%; }
+  .cuadro-sobre-mi,
+  .tableta-contenedor,
+  .historia-formacion {
+    position: relative;
+    top: auto;
+    left: auto;
+  }
+  .cuadro-sobre-mi { width: 94%; margin-top: -22vw; }
+  .texto-sobre-mi  { font-size: 2.9vw; }
+  .tableta-contenedor { width: 76%; align-self: flex-start; margin-left: -9vw; }
+  .historia-formacion { width: 92%; }
+  .historias-lista    { font-size: 3.7vw; padding: 0 3%; }
+  .historias-controles { padding: 8px 12px; gap: 10px; }
+  .historias-controles button { width: 11px; height: 11px; }
+  .lapiz-union { width: 32%; }
+}
+@keyframes flotar-estrella {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  50% { translate: 0 -9px; rotate: 2deg; }
+}
+/* ==================== SECCIÓN 3: SOFTWARE ==================== */
+.seccion-tres {
+  position: relative;
+  z-index: 1;                       /* por debajo de las nubes y del lápiz */
+  isolation: isolate;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 1924 / 2055;
+  margin-top: calc(var(--solape-nubes) * -1);  /* las nubes se montan sobre su inicio */
+  overflow-x: clip;       /* lo que se sale por los lados se recorta */
+  overflow-y: visible;    /* lo que baja (tableta, fondo) sigue dibujándose sobre la sección 4 */
+  background: #ede1c9;
+}
+/* Fondo SVG */
+.software-fondo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+}
+/* Título SOFTWARE */
+.software-titulo {
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  width: 39%;
+  height: auto;
+  object-fit: contain;
+}
+/* Estrellas independientes */
+.software-estrella {
+  position: absolute;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+}
+.software-estrella-pequena {
+  top: 20%;
+  left: -10%;
+  width: 40%;
+  transform: rotate(-8deg);
+}
+.software-estrella-grande {
+  top: 55%;
+  left: 60%;
+  width: 35%;
+  transform: rotate(12deg);
+}
+/* Círculos decorativos */
+.software-circulos {
+  position: absolute;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+}
+.software-circulos-uno {
+  top: 17%;
+  right: 5%;
+  width: 28%;
+}
+.software-circulos-dos {
+  top: 42%;
+  left: 8%;
+  width: 31%;
+}
+/* Tableta: parte inferior izquierda */
+.software-tableta {
+  position: absolute;
+  left: -30%;
+  bottom: -10%;
+  width: 80%;
+  height: auto;
+  object-fit: contain;
+}
+/* La proporción real se ajusta desde el JS con el tamaño de Celular.json;
+   este valor solo es un respaldo mientras carga. */
+.tableta-animacion {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+.tableta-animacion svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+@media (max-width: 650px) {
+  .software-titulo { top: 15%; left: 8%; width: 45%; }
+  .software-estrella-pequena { width: 20%; left: 2%; }
+  .software-estrella-grande { width: 30%; left: 58%; }
+  .software-circulos-uno { width: 30%; right: 3%; }
+  .software-circulos-dos { width: 32%; left: 5%; }
+  .software-tableta { width: 53%; }
+}
+/* ==================== TABLAS ARRASTRABLES ==================== */
+#tablero-tablas {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  overflow: hidden;
+  pointer-events: none;
+}
+/* SVG de hilos y pines: por ENCIMA de las tablas (z-index mayor y va después en el HTML) */
+#tablero-conexiones {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  overflow: visible;
+  pointer-events: none;
+}
+/* El grosor y el radio reales los calcula el JS según el ancho; estos son el respaldo */
+#tablero-conexiones line {
+  stroke: #8C4531;
+  stroke-width: 5;
+  stroke-linecap: round;
+  fill: none;
+}
+#tablero-conexiones circle {
+  fill: #8e5b30;
+  stroke: #5e3a1c;
+  stroke-width: 1.5;
+}
+#tablero-conexiones circle.pin-brillo {
+  fill: #d9a066;
+  stroke: none;
+  opacity: .75;
+}
+/* Las tablas sí reciben los eventos del ratón.
+   Cada tabla se coloca por su CENTRO (left/top) y translate -50% -50%;
+   el JS solo anima `transform` (desplazamiento + giro). */
+#tablero-tablas .tabla-arrastrable {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  max-width: none;
+  height: auto;
+  object-fit: contain;
+  translate: -50% -50%;
+  transform-origin: center;
+  will-change: transform;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+#tablero-tablas .tabla-arrastrable.arrastrando {
+  cursor: grabbing;
+}
+#tablero-tablas .tabla-arrastrable:focus-visible {
+  outline: 2px solid #8e5b30;
+  outline-offset: 4px;
+}
+/* Posiciones y giros por defecto: tomados de la imagen de referencia.
+   left/top = CENTRO de la tabla (% del tablero) · width = % del ancho del tablero. */
+#tabla-adobe {
+  left: 26.39%;
+  top: 42.3%;
+  width: 28.8%;
+  transform: rotate(-4.45deg);
+}
+#tabla-arte {
+  left: 75.1%;
+  top: 43.3%;
+  width: 32.4%;
+  transform: rotate(6.2deg);
+}
+#tabla-otros {
+  left: 51.2%;
+  top: 77.8%;
+  width: 26.7%;
+  transform: rotate(0deg);
+}
+/* ==================== ICONOS DE APLICACIONES ==================== */
+#tablero-tablas .icono-app {
+  --halo: #342b22;                    /* luz de fondo (siempre en opacidad baja) */
+  --reflejo: #ede1c9;                 /* color del brillo */
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  isolation: isolate;
+  transform-origin: center;
+  will-change: transform;
+  opacity: 0;
+  transition: opacity .5s ease;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+#tablero-tablas .icono-app.listo { opacity: 1; }
+#tablero-tablas .icono-app.agarrado { cursor: grabbing; }
+.icono-app img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+/* Halo suave detrás del icono */
+.icono-app::before {
+  content: "";
+  position: absolute;
+  inset: -22%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--halo), transparent 72%);
+  opacity: 0;
+  transform: scale(.85);
+  transition: opacity .6s ease, transform .6s ease;
+  pointer-events: none;
+}
+.icono-app.activo::before { opacity: .2; transform: scale(1); }
+/* Icono base: sombra sutil; al activarse se profundiza un poco, sin cambiar sus colores */
+.icono-base {
+  filter: drop-shadow(0 2px 2px rgba(52, 43, 34, .3));
+  transition: filter .5s ease;
+}
+.icono-app.activo .icono-base {
+  filter:
+    drop-shadow(0 4px 4px rgba(52, 43, 34, .28))
+    drop-shadow(0 0 7px rgba(52, 43, 34, .3));
+}
+/* Capas de reflejo teñidas de #ede1c9 */
+.icono-capa {
+  position: absolute;
+  inset: 0;
+  filter: brightness(0) invert(1);    /* respaldo si el navegador no soporta el filtro SVG */
+  filter: url(#tinte-crema);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+/* Barrido de luz: de vez en cuando, lento y tenue */
+.icono-barrido {
+  opacity: .4;
+  -webkit-mask-image: linear-gradient(110deg, transparent 38%, #000 50%, transparent 62%);
+  mask-image: linear-gradient(110deg, transparent 38%, #000 50%, transparent 62%);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+  animation: barrido-icono 14s ease-in-out infinite;
+  animation-delay: var(--retraso, 0s);
+}
+.icono-app.activo .icono-barrido {
+  animation: barrido-icono-rapido 1.6s ease-in-out 1;
+}
+/* Reflejo que sigue al cursor (--mx / --my los pone el JS) */
+.icono-foco {
+  opacity: 0;
+  transition: opacity .5s ease;
+  -webkit-mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
+    rgba(0, 0, 0, .9) 0, rgba(0, 0, 0, .4) 26%, transparent 62%);
+  mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
+    rgba(0, 0, 0, .9) 0, rgba(0, 0, 0, .4) 26%, transparent 62%);
+}
+.icono-app.activo .icono-foco { opacity: .35; }
+@keyframes barrido-icono {
+  0%   { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+  14%  { -webkit-mask-position: 0% 0;   mask-position: 0% 0; }
+  100% { -webkit-mask-position: 0% 0;   mask-position: 0% 0; }
+}
+@keyframes barrido-icono-rapido {
+  from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+  to   { -webkit-mask-position: 0% 0;   mask-position: 0% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .icono-barrido { animation: none !important; opacity: 0; }
+  .icono-app::before { transition: opacity .01ms; transform: none; }
+}
+.zona-limite {
+  position: absolute;
+  z-index: 1;
+  box-sizing: border-box;
+  border: 2px dashed rgba(237, 225, 201, .7);
+  background: rgba(237, 225, 201, .06);
+  border-radius: 8px;
+  pointer-events: none;
+}
+/* ==================== SECCIÓN 4: PROYECTOS ====================
+   Medidas tomadas de la imagen de referencia. Todo se mide en % del TABLERO
+   (980 x 775) o en cqw (1cqw = 1% del ancho del tablero), así la composición
+   escala igual en cualquier pantalla.
+   Ajustes rápidos:
+   --rata-x / --rata-y / --rata-ancho : posición y tamaño de la rata
+   Cada objeto (.proyectos-titulo, .p-logo, .p-foto-1, .p-hoja, .p-redes...)
+   tiene su left / top / width más abajo.
+*/
+.seccion-cuatro {
+  --ancho-tablero: min(90vw, 1150px);   /* ← aquí controlas el tamaño de todo */
+  --rata-x: 70.1%;
+  --rata-y: -18.2%;
+  --rata-ancho: 31.9%;
+  position: relative;
+  z-index: 2;
+  padding: calc(var(--ancho-tablero) * .02) 0 9vw;   /* antes: calc(min(86vw, 980px) * .02) 0 9vw */
+  background: transparent;
+}
+.proyectos-escena {
+  position: relative;
+  width: min(120vw, 1270px);
+  margin: 0 auto;
+}
+/* Grupo que flota suavemente de arriba a abajo (tablero + todo lo atado a él) */
+.proyectos-tablero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 980 / 775;
+  container-type: inline-size;
+  animation: flotar-tablero 5.5s ease-in-out infinite;
+}
+.tablero-fondo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+/* Capas (de abajo a arriba): tablero < contenido (3) < colores (4) < título (5) < rata (6) */
+.proyectos-titulo {
+  position: absolute;
+  z-index: 5;
+  left: 39.3%;
+  top: 1.9%;
+  width: 58.2%;
+  height: auto;
+  pointer-events: none;
+}
+.proyectos-colores {
+  position: absolute;
+  z-index: 4;
+  left: 7%;
+  top: 7.7%;
+  width: 21.4%;
+  height: auto;
+  pointer-events: none;
+}
+/* La rata: encima del tablero, sin animación propia */ñ
+.proyectos-rata {
+  position: absolute;
+  z-index: 6;
+  left: var(--rata-x);
+  top: var(--rata-y);
+  width: var(--rata-ancho);
+  height: auto;
+  pointer-events: none;
+}
+.proyecto-contenido {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+/* ---------- Objetos de cada proyecto ---------- */
+/* Logo (arrastrable, regresa a su sitio): abajo a la izquierda */
+.p-logo {
+  position: absolute;
+  left: 3.4%;
+  top: 56.1%;
+  width: 43.1%;
+  height: auto;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.p-logo.arrastrando { cursor: grabbing; }
+/* Fotos: cuadradas, mismo tamaño, borde amarillo de la paleta */
+.p-foto {
+  position: absolute;
+  width: 29.2%;
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  overflow: hidden;
+  border: 1.24cqw solid #e5a667;
+  border-radius: .6cqw;
+  background: #342B22;
+  rotate: var(--giro, 0deg);
+  transition: scale .3s ease;
+  cursor: pointer;
+}
+.p-foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.p-foto:hover {
+  scale: 1.045;
+  animation: meneo-foto .6s ease-in-out;
+}
+.p-foto-1 { --giro: -5.9deg; left: 3.6%;  top: 15.5%; }
+.p-foto-2 { --giro: -0.8deg; left: 35.6%; top: 17.7%; }
+.p-foto-3 { --giro:  8.1deg; left: 68.2%; top: 15.9%; }
+/* Hoja con texto: se mece como con el viento y el texto la acompaña */
+.p-hoja {
+  position: absolute;
+  left: 48.4%;
+  top: 55.5%;
+  width: 46.5%;
+  aspect-ratio: 1575 / 802;
+  transform-origin: 50% 0;
+  animation: mecer-hoja 8s ease-in-out infinite;
+}
+.p-hoja-fondo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+/* Área del texto dentro de la hoja (arriba, dejando libre abajo a la derecha para las redes) */
+.p-hoja-texto {
+  position: absolute;
+  inset: 17% 8.5% 21% 9.3%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: .6cqw;
+  color: var(--negro);
+  font-family: var(--fuente-principal);
+  transform-origin: 50% 0;
+  animation: mecer-texto 8s -1.2s ease-in-out infinite;
+}
+.p-hoja-texto h3 {
+  margin: 0;
+  font-size: 2.3cqw;
+  line-height: 1.05;
+  text-align: center;
+}
+.p-hoja-texto p {
+  margin: 0;
+  font-size: 1.8cqw;
+  font-weight: 700;
+  line-height: 1.05;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: none;
+}
+/* Iconos de redes: abajo a la derecha, alineados con el borde derecho del texto */
+.p-redes {
+  position: absolute;
+  left: 73.3%;
+  top: 81.3%;
+  display: flex;
+  gap: 1.6cqw;
+}
+.p-red {
+  display: block;
+  width: 7.9cqw;
+  -webkit-tap-highlight-color: transparent;
+}
+.p-red img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+.p-red:focus-visible,
+.flecha:focus-visible {
+  outline: 2px solid #e5a667;
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+/* ---------- Flechas: sobre los bordes del tablero, como en la referencia ---------- */
+.flecha {
+  position: absolute;
+  top: 54.8%;
+  width: 6.9%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  translate: 0 -50%;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+/* Zona de toque más grande que el dibujo */
+.flecha::before {
+  content: "";
+  position: absolute;
+  inset: -22%;
+}
+.flecha img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+.flecha-anterior  { left: -3.9%; }
+.flecha-siguiente { right: 1.65%; }
+/* Flecha.svg apunta a la izquierda: la de "siguiente" se voltea */
+.flecha-siguiente img { transform: scaleX(-1); }
+.rebota { animation: rebote .45s ease-out; }
+.solo-lectura {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+/* ---------- Animaciones sección 4 ---------- */
+@keyframes flotar-tablero {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -9px; }
+}
+@keyframes mecer-hoja {
+  0%, 100% { rotate: -.9deg; translate: 0 0; }
+  50%      { rotate: .9deg;  translate: 2px -2px; }
+}
+@keyframes mecer-texto {
+  0%, 100% { rotate: .3deg;  translate: 0 0; }
+  50%      { rotate: -.3deg; translate: -1px 1px; }
+}
+@keyframes meneo-foto {
+  0%, 100% { rotate: var(--giro); }
+  30%      { rotate: calc(var(--giro) - 2deg); }
+  65%      { rotate: calc(var(--giro) + 1.5deg); }
+}
+@keyframes rebote {
+  0%   { scale: 1; }
+  30%  { scale: .82; }
+  60%  { scale: 1.1; }
+  80%  { scale: .97; }
+  100% { scale: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .proyectos-tablero,
+  .p-hoja,
+  .p-hoja-texto,
+  .p-foto:hover,
+  .rebota {
+    animation: none !important;
+  }
+}
+/* ==================== ANIMACIONES ==================== */
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+@keyframes recorrer { to { transform: translateX(-50%); } }
+/* Los kaomojis alternan expresiones usando el blanco cálido definido en la guía. */
+@keyframes cambiar-kaomoji { 0%, 49.9% { opacity: 0; } 50%, 100% { opacity: 1; } }
+@keyframes cambiar-kaomoji-inverso { 0%, 49.9% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes flotar { 0%, 100% { translate: 0 0; } 50% { translate: 0 -11px; } }
+@keyframes flotar-suave { 0%, 100% { translate: 0 0; } 50% { translate: 0 -3px; } }
+@keyframes flotar-personaje { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+@keyframes flotar-hoja {
+  0%, 100% { translate: 0 0; rotate: -5deg; }
+  50% { translate: 0 -11px; rotate: 5deg; }
+}
+@keyframes flotar-mango {
+  0%, 100% { translate: 0 0; rotate: 5deg; }
+  50% { translate: 0 -10px; rotate: -5deg; }
+}
+@keyframes girar { to { rotate: 360deg; } }
+@keyframes expandir-disco { 0%, 100% { scale: 1; } 45% { scale: 1.07; } 65% { scale: .98; } 82% { scale: 1.035; } }
+@keyframes flecha { 0%, 100% { translate: 0 0; } 50% { translate: 0 5px; } }
+/* ==================== SECCIÓN 1: PANTALLAS ESTRECHAS ==================== */
+@media (max-width: 650px) {
+  .portada { min-height: 500px; aspect-ratio: auto; height: min(150vw, 720px); }
+  .fondo { object-position: 48% center; }
+  .nombre { width: 64%; left: 5%; top: 21%; }
+  .hoja { width: 15%; left: 3%; top: 9%; }
+  .alas { width: 14%; left: 6%; top: 37%; }
+  .mango { width: 12%; left: 46%; top: 43%; }
+  .marco-personaje { width: 59%; left: 39%; top: 8%; }
+  .presentacion { left: 7%; top: 59%; width: 49%; padding: 10px 12px; border-width: 3px; border-radius: 15px; }
+  .presentacion p { font-size: clamp(10px, 2.8vw, 14px); }
+  .disco { width: 50%; left: -10%; top: 69%; }
+  .indicacion { left: 50%; top: 86%; width: max-content; font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cinta, .nombre, .hoja, .mango, .disco, .presentacion, .indicacion svg, .marco-personaje,
+  .estrella-seccion, .kaomoji-seccion, .barra-busqueda {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

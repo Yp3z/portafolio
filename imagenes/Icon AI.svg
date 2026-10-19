@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 246 246">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ece1c9;
+      }
+
+      .cls-2 {
+        fill: #342c22;
+      }
+
+      .cls-3 {
+        fill: #b66e15;
+        font-family: Coolvetica-Regular, Coolvetica;
+        font-size: 170.75px;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M55.67,0h134.66C221.06,0,246,24.94,246,55.67v134.66c0,30.72-24.94,55.67-55.67,55.67H55.67C24.94,246,0,221.06,0,190.33V55.67C0,24.94,24.94,0,55.67,0Z" transform="translate(246 0) rotate(90)"/>
+  <rect class="cls-2" x="10" y="10" width="226" height="226" rx="45.67" ry="45.67"/>
+  <text class="cls-3" transform="translate(44.41 183.52)"><tspan x="0" y="0">Ai</tspan></text>
+</svg>
