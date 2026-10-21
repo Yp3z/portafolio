@@ -42,7 +42,15 @@ const CONTROL = {
   suavizado: 9             // más alto = respuesta más rápida
 };
 
-const CUADRICULA = { celda: 0.8, grosor: 1.4, cerca: 7, lejos: 60 };
+/* Aspecto pixelado (tipo Nintendo DS): la escena se dibuja en baja resolución y se amplía sin suavizar,
+   las texturas no se suavizan y el cielo usa una paleta limitada con tramado (dithering).
+   Para volver al aspecto liso: activo: false. */
+const PIXELADO = {
+  activo: true,
+  columnas: 500        // ancho del render en píxeles (menos = píxeles más grandes)
+};
+
+const CUADRICULA = { celda: 0.8, grosor: 1.4, grosorPixel: 1.2, cerca: 7, lejos: 60 };
 const ESTRELLAS = { cantidad: 1200, radio: 180 };
 
 // Medidas de LowPoly.glb por si el cálculo automático fallara (tamaño y centro del modelo)
@@ -84,6 +92,67 @@ function crearControl(cfg, vista) {
 }
 
 /* ------------------------------------------------------------------
+ * CIELO PIXELADO (degradado con tramado ordenado sobre una paleta fija)
+ * Dibuja en "datos" (RGBA, w x h) el mismo degradado del CSS: cielo oscuro, horizonte con
+ * resplandor verde y suelo oscuro. Los colores se limitan a esta paleta (de marrón oscuro a
+ * tu verde oliva) y se tramean con una matriz Bayer 4x4 entre tonos vecinos.
+ * ------------------------------------------------------------------ */
+const PALETA_CIELO = [
+  [20, 16, 12], [27, 22, 17], [36, 30, 23], [42, 35, 27],
+  [52, 43, 34], [66, 60, 40], [82, 76, 52], [102, 102, 58]
+];
+const BAYER4 = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+
+// Posición (decimal) de un color a lo largo de la paleta: el punto más cercano de la polilínea
+function posicionEnPaleta(col) {
+  let mejor = 0, mejorD = Infinity;
+  for (let j = 0; j < PALETA_CIELO.length - 1; j++) {
+    const a = PALETA_CIELO[j], b = PALETA_CIELO[j + 1];
+    let dd = 0, ab = 0;
+    for (let k = 0; k < 3; k++) { ab += (b[k] - a[k]) ** 2; dd += (col[k] - a[k]) * (b[k] - a[k]); }
+    const u = limitar(dd / Math.max(1e-6, ab), 0, 1);
+    let dist = 0;
+    for (let k = 0; k < 3; k++) dist += (a[k] + (b[k] - a[k]) * u - col[k]) ** 2;
+    if (dist < mejorD) { mejorD = dist; mejor = j + u; }
+  }
+  return mejor;
+}
+
+function pintarCielo(datos, w, h, horizonte) {
+  // [posición, color]: arriba → horizonte → suelo
+  const paradas = [
+    [0, [27, 22, 17]],
+    [Math.max(0.01, horizonte - 0.02), [42, 35, 27]],
+    [horizonte, [52, 43, 34]],
+    [1, [33, 27, 21]]
+  ];
+  const verde = [102, 102, 58];
+  const max = PALETA_CIELO.length - 1;
+  for (let y = 0; y < h; y++) {
+    const t = (y + 0.5) / h;
+    let i = 0;
+    while (i < paradas.length - 2 && t > paradas[i + 1][0]) i++;
+    const [t0, c0] = paradas[i];
+    const [t1, c1] = paradas[i + 1];
+    const f = limitar((t - t0) / Math.max(1e-6, t1 - t0), 0, 1);
+    // resplandor del horizonte (sube hasta 0.22 y baja)
+    let g = t < horizonte ? (t - (horizonte - 0.10)) / 0.10 : (horizonte + 0.08 - t) / 0.08;
+    g = limitar(g, 0, 1) * 0.22;
+    const col = [0, 1, 2].map((k) => {
+      const base = c0[k] + (c1[k] - c0[k]) * f;
+      return base + (verde[k] - base) * g;
+    });
+    const pos = posicionEnPaleta(col);          // una sola posición por fila: sin manchas de color
+    for (let x = 0; x < w; x++) {
+      const u = (BAYER4[(y & 3) * 4 + (x & 3)] + 0.5) / 16;
+      const c = PALETA_CIELO[limitar(Math.floor(pos + u), 0, max)];
+      const o = (y * w + x) * 4;
+      datos[o] = c[0]; datos[o + 1] = c[1]; datos[o + 2] = c[2]; datos[o + 3] = 255;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
  * ESCENA
  * ------------------------------------------------------------------ */
 const contenedor = document.getElementById("visor-3d");
@@ -108,7 +177,7 @@ function iniciar() {
 
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+    renderer = new THREE.WebGLRenderer({ antialias: !PIXELADO.activo, alpha: true, powerPreference: "high-performance" });
   } catch (e) {
     mensaje("Tu navegador no pudo iniciar el visor 3D.");
     return;
@@ -117,6 +186,7 @@ function iniciar() {
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   const canvas = renderer.domElement;
   canvas.setAttribute("aria-hidden", "true");
+  if (PIXELADO.activo) canvas.style.imageRendering = "pixelated";   // ampliar sin suavizar
   contenedor.insertBefore(canvas, contenedor.firstChild);
 
   const escena = new THREE.Scene();
@@ -140,6 +210,7 @@ function iniciar() {
         uColorMayor: { value: new THREE.Color(COLORES.verdeClaro) },
         uCelda: { value: CUADRICULA.celda },
         uGrosor: { value: CUADRICULA.grosor },
+        uDuro: { value: PIXELADO.activo ? 1 : 0 },
         uCerca: { value: CUADRICULA.cerca },
         uLejos: { value: CUADRICULA.lejos }
       },
@@ -156,8 +227,14 @@ function iniciar() {
         uniform vec3 uColorMayor;
         uniform float uCelda;
         uniform float uGrosor;
+        uniform float uDuro;
         uniform float uCerca;
         uniform float uLejos;
+        float bayer4(vec2 p) {
+          float m[16] = float[16](0.,8.,2.,10., 12.,4.,14.,6., 3.,11.,1.,9., 15.,7.,13.,5.);
+          int i = int(mod(p.x, 4.0)) + 4 * int(mod(p.y, 4.0));
+          return (m[i] + 0.5) / 16.0;
+        }
         float linea(vec2 c, float grosor) {
           vec2 g = abs(fract(c - 0.5) - 0.5) / fwidth(c);
           float l = min(g.x, g.y);
@@ -170,8 +247,13 @@ function iniciar() {
           float d = length(vMundo.xz - cameraPosition.xz);
           float fade = 1.0 - smoothstep(uCerca, uLejos, d);
           float a = max(menor * 0.85, mayor) * fade;
+          if (uDuro > 0.5) {
+            // Modo pixelado: líneas nítidas y desvanecimiento con tramado en lugar de transparencia suave
+            float linea = step(0.4, max(menor, mayor));
+            a = linea * (fade > bayer4(gl_FragCoord.xy) ? 1.0 : 0.0);
+          }
           if (a < 0.003) discard;
-          gl_FragColor = vec4(mix(uColor, uColorMayor, mayor), a);
+          gl_FragColor = vec4(mix(uColor, uColorMayor, step(0.4, mayor)), a);
           #include <colorspace_fragment>
         }`
     })
@@ -182,6 +264,7 @@ function iniciar() {
 
   /* ---------- Estrellas (en el sector de cielo que ve la cámara) ---------- */
   const uniformsEstrellas = {
+    uDuro: { value: PIXELADO.activo ? 1 : 0 },
     uTiempo: { value: 0 },
     uPR: { value: 1 },
     uColor: { value: new THREE.Color(COLORES.crema) }
@@ -226,15 +309,16 @@ function iniciar() {
           varying float vAlfa;
           void main() {
             vAlfa = aAlfa * (0.78 + 0.22 * sin(uTiempo * aVel + aFase));
-            gl_PointSize = aTam * uPR;
+            gl_PointSize = max(1.0, floor(aTam * uPR + 0.5));
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
           }`,
         fragmentShader: `
           uniform vec3 uColor;
+          uniform float uDuro;
           varying float vAlfa;
           void main() {
             float d = length(gl_PointCoord - 0.5);
-            float a = smoothstep(0.5, 0.2, d) * vAlfa;
+            float a = uDuro > 0.5 ? vAlfa : smoothstep(0.5, 0.2, d) * vAlfa;   // pixelado: puntos cuadrados
             if (a < 0.01) discard;
             gl_FragColor = vec4(uColor, a);
             #include <colorspace_fragment>
@@ -299,7 +383,15 @@ function iniciar() {
         if (!o.isMesh) return;
         o.frustumCulled = false;                       // los modelos con esqueleto no deben desaparecer
         const mats = Array.isArray(o.material) ? o.material : [o.material];
-        mats.forEach((m) => { if (m && m.map) m.map.anisotropy = anisotropia; });
+        mats.forEach((m) => {
+          if (!m || !m.map) return;
+          m.map.anisotropy = anisotropia;
+          if (PIXELADO.activo) {                       // texturas nítidas, sin suavizar
+            m.map.magFilter = THREE.NearestFilter;
+            m.map.minFilter = THREE.NearestMipmapLinearFilter;
+            m.map.needsUpdate = true;
+          }
+        });
       });
       pivote.add(modelo);
       mensaje("");
@@ -315,18 +407,56 @@ function iniciar() {
     const h = (1 + Math.tan(sube) / Math.tan((VISTA.fov * Math.PI) / 360)) / 2;
     contenedor.style.setProperty("--horizonte", `${(h * 100).toFixed(2)}%`);
   }
+  // Cielo pixelado: lienzo del mismo tamaño que el render, usado como fondo de la escena
+  let cielo = null;      // { lienzo, ctx, textura, w, h }
+  let cieloH = -1;
+  function pintarFondo(forzar) {
+    if (!PIXELADO.activo || !cielo) return;
+    const horizonte = parseFloat(contenedor.style.getPropertyValue("--horizonte")) / 100 || 0.62;
+    if (!forzar && Math.abs(horizonte - cieloH) < 0.003) return;
+    cieloH = horizonte;
+    const img = cielo.ctx.createImageData(cielo.w, cielo.h);
+    pintarCielo(img.data, cielo.w, cielo.h, horizonte);
+    cielo.ctx.putImageData(img, 0, 0);
+    cielo.textura.needsUpdate = true;
+  }
+  function crearCielo(w, h) {
+    if (cielo) cielo.textura.dispose();
+    const lienzo = document.createElement("canvas");
+    lienzo.width = w;
+    lienzo.height = h;
+    const textura = new THREE.CanvasTexture(lienzo);
+    textura.colorSpace = THREE.SRGBColorSpace;
+    textura.magFilter = THREE.NearestFilter;
+    textura.minFilter = THREE.NearestFilter;
+    textura.generateMipmaps = false;
+    cielo = { lienzo, ctx: lienzo.getContext("2d"), textura, w, h };
+    escena.background = textura;
+    pintarFondo(true);
+  }
   function ajustar() {
     const w = contenedor.clientWidth;
     const h = contenedor.clientHeight;
     if (!w || !h) return;
-    const pr = Math.min(window.devicePixelRatio || 1, 1.75);
-    renderer.setPixelRatio(pr);
-    renderer.setSize(w, h, false);
     camara.aspect = w / h;
     camara.updateProjectionMatrix();
-    uniformsEstrellas.uPR.value = pr;
-    cuadricula.material.uniforms.uGrosor.value = CUADRICULA.grosor * pr;
     actualizarHorizonte();
+    if (PIXELADO.activo) {
+      const rw = PIXELADO.columnas;
+      const rh = Math.max(16, Math.round((PIXELADO.columnas * h) / w));
+      renderer.setPixelRatio(1);
+      renderer.setSize(rw, rh, false);                 // se dibuja pequeño y el CSS lo amplía
+      uniformsEstrellas.uPR.value = 0.8;
+      cuadricula.material.uniforms.uGrosor.value = CUADRICULA.grosorPixel;
+      if (!cielo || cielo.w !== rw || cielo.h !== rh) crearCielo(rw, rh);
+      else pintarFondo(true);
+    } else {
+      const pr = Math.min(window.devicePixelRatio || 1, 1.75);
+      renderer.setPixelRatio(pr);
+      renderer.setSize(w, h, false);
+      uniformsEstrellas.uPR.value = pr;
+      cuadricula.material.uniforms.uGrosor.value = CUADRICULA.grosor * pr;
+    }
   }
   if ("ResizeObserver" in window) new ResizeObserver(ajustar).observe(contenedor);
   else window.addEventListener("resize", ajustar);
@@ -358,6 +488,7 @@ function iniciar() {
     if (Math.abs(control.est.dist - horizonteAnterior) > 0.002) {
       horizonteAnterior = control.est.dist;
       actualizarHorizonte();
+      pintarFondo(false);
     }
     uniformsEstrellas.uTiempo.value = sinMovimiento ? 0 : t / 1000;
     renderer.render(escena, camara);
