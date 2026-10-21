@@ -14,7 +14,10 @@
   --fuente-kaomoji: "Segoe UI", sans-serif;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;     /* evita la columna blanca al arrastrar hacia un lado */
+}
 body {
   margin: 0;
   color: var(--negro);
@@ -70,6 +73,9 @@ body {
   min-height: 170vh;
   overflow: visible;
 }
+/* Contenedor de la composición: en escritorio no genera caja (los elementos se colocan sobre
+   .portada como siempre); en celular se vuelve un recuadro de proporción fija, debajo del reproductor. */
+.escenario-portada { display: contents; }
 .fondo {
   position: absolute;
   z-index: -2;
@@ -213,6 +219,8 @@ body {
   --negro: #342B22;
   --crema: #EDE1C9;
   --verde: #66663A;
+  position: relative;
+  z-index: 9;                      /* por encima de la ilustración: sus botones siempre reciben el toque */
   width: min(100%, 200px);
   margin: 25px auto;
   color: var(--negro);
@@ -251,10 +259,21 @@ body {
   appearance: none;
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
+  position: relative;
+  touch-action: manipulation;       /* sin retraso ni zoom por doble toque */
   transition: transform 0.18s ease;
 }
-.reproductor button:hover:not(:disabled) {
-  transform: scale(1.06);
+/* Zona de toque más grande que el dibujo (mínimo cómodo para el dedo) */
+.reproductor button::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+}
+@media (hover: hover) {
+  .reproductor button:hover:not(:disabled) { transform: scale(1.06); }
+}
+@media (hover: none) {
+  .reproductor button:active:not(:disabled) { transform: scale(.92); }
 }
 .control-lateral {
   width: 30px;
@@ -346,25 +365,18 @@ body {
   font-size: 12px;
   color: var(--negro);
 }
-@media (max-width: 380px) {
-  .reproductor-barra {
-    height: 72px;
-    padding: 0 12px;
-    gap: 4px;
-  }
-  .control-central {
-    width: 100px;
-    height: 100px;
-    margin: 0 4px;
-  }
-  .control-lateral {
-    width: 35px;
-    height: 32px;
-  }
-  .control-central svg {
-    width: 34px;
-    height: 34px;
-  }
+/* ---------- Reproductor en celular ---------- */
+@media (max-width: 650px) {
+  .reproductor { width: min(76vw, 280px); margin: 16px auto 6px; }
+  .reproductor-barra { height: 48px; padding: 0 18px; gap: 6px; }
+  .control-lateral { width: 36px; height: 36px; }
+  .control-central .icono-play,
+  .control-central .icono-pausa { width: 36px; height: 36px; }
+  .volumen-contenedor { width: 84%; margin-top: 16px; }
+  .volumen-barra { height: 28px; }
+  .volumen-barra::-webkit-slider-thumb { width: 28px; height: 28px; margin-top: -9px; }
+  .volumen-barra::-moz-range-thumb { width: 28px; height: 28px; }
+  .musica-cancion { font-size: clamp(15px, 4.4vw, 19px); }
 }
 /* ==================== SECCIÓN 2 ====================
    Todo se coloca con porcentajes del propio ancho/alto de la sección
@@ -619,10 +631,10 @@ body {
     left: auto;
   }
   .cuadro-sobre-mi { width: 94%; margin-top: -22vw; }
-  .texto-sobre-mi  { font-size: 2.9vw; }
+  .texto-sobre-mi  { font-size: max(9.5px, 2.9vw); }
   .tableta-contenedor { width: 76%; align-self: flex-start; margin-left: -9vw; }
   .historia-formacion { width: 92%; }
-  .historias-lista    { font-size: 3.7vw; padding: 0 3%; }
+  .historias-lista    { font-size: max(12px, 3.7vw); min-height: 10.4em; padding: 0 3%; }
   .historias-controles { padding: 8px 12px; gap: 10px; }
   .historias-controles button { width: 11px; height: 11px; }
   .lapiz-union { width: 32%; }
@@ -931,7 +943,7 @@ body {
    tiene su left / top / width más abajo.
 */
 .seccion-cuatro {
-  --ancho-tablero: min(90vw, 1150px);   /* ← aquí controlas el tamaño de todo */
+  --ancho-tablero: min(96vw, 1270px);   /* ← aquí controlas el tamaño de todo (nunca más que la pantalla) */
   --rata-x: 70.1%;
   --rata-y: -18.2%;
   --rata-ancho: 31.9%;
@@ -942,7 +954,7 @@ body {
 }
 .proyectos-escena {
   position: relative;
-  width: min(120vw, 1270px);
+  width: var(--ancho-tablero);
   margin: 0 auto;
 }
 /* Grupo que flota suavemente de arriba a abajo (tablero + todo lo atado a él) */
@@ -1132,7 +1144,7 @@ body {
   height: auto;
   pointer-events: none;
 }
-.flecha-anterior  { left: -3.9%; }
+.flecha-anterior  { left: max(-3.9%, calc(2px - (100vw - var(--ancho-tablero)) / 2)); }   /* no se sale de la pantalla */
 .flecha-siguiente { right: 1.65%; }
 /* Flecha.svg apunta a la izquierda: la de "siguiente" se voltea */
 .flecha-siguiente img { transform: scaleX(-1); }
@@ -1180,7 +1192,6 @@ body {
     animation: none !important;
   }
 }
-
 /* ==================== SECCIÓN 5: VISOR 3D ====================
    Medidas tomadas de la imagen de referencia (782 x 816). Todo está en % del escenario
    (o en cqw, 1cqw = 1% de su ancho), así que escala igual en cualquier pantalla.
@@ -1399,7 +1410,6 @@ body {
   color: #ede1c9;
   pointer-events: none;
 }
-
 /* ==================== ANIMACIONES ==================== */
 @keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
 @keyframes recorrer { to { transform: translateX(-50%); } }
@@ -1420,9 +1430,24 @@ body {
 @keyframes girar { to { rotate: 360deg; } }
 @keyframes expandir-disco { 0%, 100% { scale: 1; } 45% { scale: 1.07; } 65% { scale: .98; } 82% { scale: 1.035; } }
 @keyframes flecha { 0%, 100% { translate: 0 0; } 50% { translate: 0 5px; } }
-/* ==================== SECCIÓN 1: PANTALLAS ESTRECHAS ==================== */
+/* ==================== SECCIÓN 1: PANTALLAS ESTRECHAS ====================
+   El reproductor ocupa su propia franja arriba; debajo va el escenario (todos los elementos en %
+   de su propio recuadro, con proporción fija), así nada se pisa y todo escala igual en cualquier celular. */
 @media (max-width: 650px) {
-  .portada { min-height: 500px; aspect-ratio: auto; height: min(150vw, 720px); }
+  .portada {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: auto;
+  }
+  .escenario-portada {
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+  }
   .fondo { object-position: 48% center; }
   .nombre { width: 64%; left: 5%; top: 21%; }
   .hoja { width: 15%; left: 3%; top: 9%; }
@@ -1440,4 +1465,9 @@ body {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
   }
+}
+/* Sección 4 en celular */
+@media (max-width: 650px) {
+  .seccion-cuatro { --ancho-tablero: 94vw; }
+  .flecha { width: 8.6%; }
 }

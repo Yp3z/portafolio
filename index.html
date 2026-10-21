@@ -26,20 +26,6 @@
   <!-- ==================== INICIO SECCIÓN 1 ==================== -->
   <main class="portada" aria-label="Presentación de Matheo Yepez">
     <img class="fondo" src="imagenes/Fondo.svg" alt="" aria-hidden="true">
-    <img class="alas" src="imagenes/Alas.svg" alt="" aria-hidden="true">
-    <img class="disco" src="imagenes/Disco.svg" alt="" aria-hidden="true">
-    <img class="nombre" src="imagenes/Nombre.svg" alt="Matheo Yepez">
-    <img class="hoja" src="imagenes/Sticker_Hoja.svg" alt="" aria-hidden="true">
-    <img class="mango" src="imagenes/Sticker_Mango.svg" alt="" aria-hidden="true">
-    <div class="marco-personaje" id="personaje" tabindex="0" role="img" aria-label="Ilustración animada de Matheo">
-      <div class="animacion-lottie" aria-hidden="true"></div>
-    </div>
-    <section class="presentacion" aria-label="Sobre mí">
-      <p id="texto-presentacion"></p>
-      <span id="texto-original" hidden>
-        ¡Hola, Mi nombre es Matheo! Soy un técnico de producción de multimedia, apasionado por los videojuegos, la ilustración y la animación.
-      </span>
-    </section>
     <section class="reproductor" aria-label="Reproductor musical">
       <div class="reproductor-barra">
         <button id="musica-anterior" class="control-lateral"
@@ -79,11 +65,28 @@
         Preparando música...
       </p>
     </section>
-    <a class="indicacion" href="#siguiente">
-      <span>¿Quieres saber más sobre mí?</span>
-      <span class="ripple-wave">¡Sigue Deslizando!</span>
-      <svg viewBox="0 0 32 42" aria-hidden="true"><path d="M16 2v31M5 23l11 12 11-12" /></svg>
-    </a>
+    <!-- Escenario de la portada: en escritorio no crea caja; en celular es un recuadro con proporción fija -->
+    <div class="escenario-portada">
+      <img class="alas" src="imagenes/Alas.svg" alt="" aria-hidden="true">
+      <img class="disco" src="imagenes/Disco.svg" alt="" aria-hidden="true">
+      <img class="nombre" src="imagenes/Nombre.svg" alt="Matheo Yepez">
+      <img class="hoja" src="imagenes/Sticker_Hoja.svg" alt="" aria-hidden="true">
+      <img class="mango" src="imagenes/Sticker_Mango.svg" alt="" aria-hidden="true">
+      <div class="marco-personaje" id="personaje" tabindex="0" role="img" aria-label="Ilustración animada de Matheo">
+        <div class="animacion-lottie" aria-hidden="true"></div>
+      </div>
+      <section class="presentacion" aria-label="Sobre mí">
+        <p id="texto-presentacion"></p>
+        <span id="texto-original" hidden>
+          ¡Hola, Mi nombre es Matheo! Soy un técnico de producción de multimedia, apasionado por los videojuegos, la ilustración y la animación.
+        </span>
+      </section>
+      <a class="indicacion" href="#siguiente">
+        <span>¿Quieres saber más sobre mí?</span>
+        <span class="ripple-wave">¡Sigue Deslizando!</span>
+        <svg viewBox="0 0 32 42" aria-hidden="true"><path d="M16 2v31M5 23l11 12 11-12" /></svg>
+      </a>
+    </div>
   </main>
   <!-- ==================== FIN SECCIÓN 1 ==================== -->
   <!-- ==================== INICIO SECCIÓN 2 ==================== -->
@@ -433,11 +436,9 @@
     <p id="proyecto-estado" class="solo-lectura" role="status" aria-live="polite"></p>
   </section>
   <!-- ==================== FIN SECCIÓN 4 ==================== -->
-
 <!-- ==================== INICIO SECCIÓN 5: VISOR 3D ==================== -->
 <section id="seccion-cinco" class="seccion-cinco" aria-label="Visor 3D">
   <h2 class="solo-lectura">Visor 3D</h2>
-
   <!-- Filtros (no dibujan nada): tiñen las siluetas del reverso y la sombra del sticker -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <filter id="tinte-reverso" color-interpolation-filters="sRGB">
@@ -447,23 +448,18 @@
       <feColorMatrix type="matrix" values="0 0 0 0 0.2039  0 0 0 0 0.1686  0 0 0 0 0.1333  0 0 0 1 0" />
     </filter>
   </svg>
-
   <div class="visor-escena" id="visor-escena">
     <!-- Fondo punteado -->
     <span class="visor-halftono visor-halftono-uno" aria-hidden="true"></span>
     <span class="visor-halftono visor-halftono-dos" aria-hidden="true"></span>
-
     <!-- Letras "3" y "D" -->
     <img class="visor-letra visor-tres" src="imagenes/Tres.svg" alt="" aria-hidden="true" draggable="false" />
     <img class="visor-letra visor-de" src="imagenes/De.svg" alt="" aria-hidden="true" draggable="false" />
-
     <!-- Dispositivo azul (reemplázalo por tu propio SVG con el mismo nombre si quieres) -->
     <img class="visor-dispositivo" src="imagenes/Tamagotchi.json" alt="" aria-hidden="true" draggable="false" />
-
     <!-- Teléfono y su pantalla (aquí irá el modelo 3D) -->
     <img class="visor-telefono" src="imagenes/Telefono.svg" alt="" aria-hidden="true" draggable="false" />
     <div class="visor-pantalla" id="visor-3d" role="img" aria-label="Pantalla del visor 3D"></div>
-
     <!-- Controles: izquierda, derecha, más y menos (cada uno se hunde al presionarlo) -->
     <div class="visor-controles">
       <svg class="controles-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 688.47 229.05" aria-label="Controles del visor">
@@ -487,7 +483,6 @@
         <g id="ctl-centro"><circle fill="#524c34" cx="389.6" cy="117.66" r="38.52"/></g>
       </svg>
     </div>
-
     <!-- Sticker de la flor, con efecto de despegue (peel) -->
     <div class="sticker-peel" id="sticker-flor" aria-hidden="true">
       <div class="sp-marco">
@@ -500,19 +495,16 @@
         </div></div>
       </div>
     </div>
-
     <!-- Llavero: cabeza (se puede sostener) y cuerda de cuentas con física -->
     <img class="llavero-cabeza" id="llavero-cabeza" src="imagenes/Llavero.svg" alt="Llavero" draggable="false" />
     <svg class="llavero-cuerda" id="llavero-cuerda" viewBox="0 0 782 816" aria-hidden="true"></svg>
   </div>
 </section>
 <!-- ==================== FIN SECCIÓN 5 ==================== -->
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
   <script src="interacciones.js"></script>
-
   <!-- Visor 3D: ponlo al final del <body>, junto a tus otros <script> -->
 <script type="importmap">
 {
@@ -523,6 +515,5 @@
 }
 </script>
 <script type="module" src="visor3d.js"></script>
-
 </body>
 </html>
