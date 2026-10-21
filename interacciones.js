@@ -10,7 +10,7 @@
     );
     return;
   }
-  // Evitar crear otra animación en el mismo contenedor.
+
   if (contenedor.dataset.lottieIniciado === "true") {
     console.warn("Lottie ya está iniciado en este contenedor.");
     return;
@@ -905,7 +905,7 @@
   const PROYECTO_BASE = {
     nombre: "Proyecto",
     logo: "imagenes/TT Logo.svg",
-    fotos: ["fotos/foto1.jpg", "fotos/foto2.jpg", "fotos/foto3.jpg"],
+    fotos: ["imagenes/foto1.jpg", "imagenes/foto2.jpg", "imagenes/foto3.jpg"],
     titulo: "",   // déjalo vacío para no mostrar título (como en la referencia)
     texto:
       "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy " +
@@ -914,8 +914,8 @@
       "nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in " +
       "hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla",
     redes: [
-      { icono: "imagenes/Insta_Icon.svg",  url: "#", nombre: "Instagram" },
-      { icono: "imagenes/Tiktok_Icon.svg", url: "#", nombre: "TikTok" }
+      { icono: "imagenes/Insta Icon.svg",  url: "#", nombre: "Instagram" },
+      { icono: "imagenes/Tiktok Icon.svg", url: "#", nombre: "TikTok" }
     ]
   };
   const PROYECTOS = [
@@ -1096,4 +1096,452 @@
     if (red.getAttribute("href") === "#") ev.preventDefault();
   });
   montar(0);
+})();
+
+/* ==================== SECCIÓN 5: VISOR 3D ==================== */
+(() => {
+  "use strict";
+
+  const escena = document.getElementById("visor-escena");
+  if (!escena) return;
+
+  const sinMovimiento =
+    !!window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const limitar = (v, min, max) => Math.max(min, Math.min(max, v));
+
+  /* ================================================================
+   * 1. BOTONES (izquierda, derecha, más y menos)
+   *    Se hunden al presionarlos y rebotan al soltarlos (las clases están en el CSS).
+   *    Avisan al visor 3D con el evento "visor3d:control":
+   *      escena.addEventListener("visor3d:control", (e) => { e.detail.accion; e.detail.fase })
+   *      accion: "izquierda" | "derecha" | "mas" | "menos"
+   *      fase:   "inicio" (al presionar) | "fin" (al soltar)
+   * ================================================================ */
+  (() => {
+    const PRESION_MINIMA = 110;   // ms que se queda hundido aunque sea un toque rápido
+
+    escena.querySelectorAll(".ctl-btn").forEach((boton) => {
+      const accion = boton.dataset.accion;
+      let inicio = 0;
+      let temporizador = 0;
+      let activo = false;
+
+      const lanzar = (fase) => {
+        escena.dispatchEvent(new CustomEvent("visor3d:control", {
+          bubbles: true,
+          detail: { accion, fase }
+        }));
+      };
+      const bajar = () => {
+        clearTimeout(temporizador);
+        inicio = performance.now();
+        boton.classList.add("presionado");
+        if (!activo) { activo = true; lanzar("inicio"); }
+      };
+      const subir = () => {
+        const falta = Math.max(0, PRESION_MINIMA - (performance.now() - inicio));
+        clearTimeout(temporizador);
+        temporizador = setTimeout(() => boton.classList.remove("presionado"), falta);
+        if (activo) { activo = false; lanzar("fin"); }
+      };
+
+      boton.addEventListener("pointerdown", (e) => { e.preventDefault(); bajar(); });
+      ["pointerup", "pointerleave", "pointercancel"].forEach((tipo) =>
+        boton.addEventListener(tipo, subir)
+      );
+      boton.addEventListener("keydown", (e) => {
+        if ((e.key === "Enter" || e.key === " ") && !e.repeat) { e.preventDefault(); bajar(); }
+      });
+      boton.addEventListener("keyup", (e) => {
+        if (e.key === "Enter" || e.key === " ") subir();
+      });
+      boton.addEventListener("blur", subir);
+    });
+  })();
+
+  /* ================================================================
+   * 2. STICKER CON EFECTO PEEL (la flor)
+   *    Al pasar el cursor se levanta una esquina; al arrastrar se despega más
+   *    mostrando su reverso; al soltar vuelve a pegarse con rebote.
+   * ================================================================ */
+  (() => {
+    const sticker = document.getElementById("sticker-flor");
+    if (!sticker) return;
+
+    const DIRECCION = -135;                     // grados: el despegue avanza hacia arriba-izquierda
+    const rad = DIRECCION * Math.PI / 180;
+    const dx = Math.cos(rad);
+    const dy = Math.sin(rad);
+    const HOVER = 0.17;                         // cuánto se levanta al pasar el cursor (0 a 1)
+    const MAXIMO = 0.85;                        // cuánto se puede despegar arrastrando
+
+    const estado = { t: 0 };                    // 0 = pegado · 1 = despegado del todo
+    let W = 0, H = 0, S = 0, E = 0;
+    let arrastre = null;
+
+    sticker.style.setProperty("--a", `${DIRECCION}deg`);
+
+    function dibujar() {
+      const t = Math.max(0, estado.t);
+      const P = (S - E) / 2 + t * E;            // posición del doblez dentro del marco
+      sticker.style.setProperty("--P", `${P}px`);
+    }
+    function medir() {
+      W = sticker.offsetWidth;
+      H = sticker.offsetHeight;
+      S = W + H;
+      E = Math.abs(W * dx) + Math.abs(H * dy);  // largo del sticker en la dirección del despegue
+      sticker.style.setProperty("--W", `${W}px`);
+      sticker.style.setProperty("--H", `${H}px`);
+      sticker.style.setProperty("--S", `${S}px`);
+      dibujar();
+    }
+    function animar(hasta, duracion, ease) {
+      if (window.gsap) {
+        window.gsap.killTweensOf(estado);
+        window.gsap.to(estado, { t: hasta, duration: duracion, ease: ease || "power2.out", onUpdate: dibujar });
+      } else {
+        estado.t = hasta;
+        dibujar();
+      }
+    }
+
+    sticker.addEventListener("pointerenter", (e) => {
+      if (arrastre || sinMovimiento || e.pointerType !== "mouse") return;
+      animar(HOVER, 0.45, "power2.out");
+    });
+    sticker.addEventListener("pointerleave", () => {
+      if (arrastre) return;
+      animar(0, 0.9, "elastic.out(1, 0.55)");
+    });
+    sticker.addEventListener("pointerdown", (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      if (sticker.setPointerCapture) sticker.setPointerCapture(e.pointerId);
+      if (window.gsap) window.gsap.killTweensOf(estado);
+      arrastre = { id: e.pointerId, x: e.clientX, y: e.clientY, t0: estado.t };
+      sticker.classList.add("agarrado");
+      e.preventDefault();
+    });
+    sticker.addEventListener("pointermove", (e) => {
+      if (!arrastre || arrastre.id !== e.pointerId) return;
+      // Cuánto avanzó el puntero en la dirección del despegue
+      const avance = (e.clientX - arrastre.x) * dx + (e.clientY - arrastre.y) * dy;
+      estado.t = limitar(arrastre.t0 + avance / (2 * E), 0, MAXIMO);
+      dibujar();
+    });
+    const soltar = (e) => {
+      if (!arrastre || arrastre.id !== e.pointerId) return;
+      arrastre = null;
+      sticker.classList.remove("agarrado");
+      animar(0, 1.1, "elastic.out(1, 0.5)");    // se vuelve a pegar
+    };
+    sticker.addEventListener("pointerup", soltar);
+    sticker.addEventListener("pointercancel", soltar);
+    sticker.addEventListener("lostpointercapture", soltar);
+
+    if ("ResizeObserver" in window) new ResizeObserver(medir).observe(sticker);
+    else window.addEventListener("resize", medir);
+    medir();
+  })();
+
+  /* ================================================================
+   * 3. LLAVERO CON FÍSICA
+   *    La cuerda son dos hebras de cuentas (colores #897c71 y #524c34) que cuelgan del
+   *    anillo del teléfono. Pasar el mouse la mueve; se puede sostener y soltar la cabeza.
+   * ================================================================ */
+  (() => {
+    const cabeza = document.getElementById("llavero-cabeza");
+    const svg = document.getElementById("llavero-cuerda");
+    if (!cabeza || !svg) return;
+
+    /* ---------- Simulación (unidades = píxeles de la imagen de referencia, 782 x 816) ---------- */
+  /* Simulación del llavero (pura, sin DOM). Unidades: píxeles de la imagen de referencia (782 x 816).
+     La cuerda son dos hebras de cuentas (lazo) que cuelgan del anillo del teléfono y sujetan la cabeza. */
+  function crearSimulacion(CFG) {
+    const pt = (x, y, im) => ({ x, y, px: x, py: y, im, ox: 0, oy: 0 });
+    const nI = CFG.nodosIzq, nD = CFG.nodosDer;     // posiciones de referencia de cada cuenta
+    const n = nI.length - 1;                        // segmentos por hebra
+    const cab = CFG.cabezaCentro;
+
+    // Hebras: el nodo 0 es fijo (anillo) y el último es la unión con la cabeza
+    const hebraIzq = nI.map((p, i) => pt(p.x, p.y, i === 0 ? 0 : 1));
+    const hebraDer = nD.map((p, i) => pt(p.x, p.y, i === 0 ? 0 : 1));
+    const hl = hebraIzq[n], hr = hebraDer[n];
+    const centro = pt(cab.x, cab.y, CFG.masaCabeza);
+    centro.esCabeza = hl.esCabeza = hr.esCabeza = true;
+
+    const libres = [...hebraIzq.slice(1, n), ...hebraDer.slice(1, n), hl, hr, centro];
+    const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+    // Restricciones de distancia [a, b, distancia, rigidez]; las longitudes salen de la referencia (sin tensión en reposo)
+    const R = [];
+    for (const hebra of [hebraIzq, hebraDer]) {
+      for (let i = 0; i < n; i++) R.push([hebra[i], hebra[i + 1], dist(hebra[i], hebra[i + 1]), 1]);
+    }
+    R.push([hl, hr, dist(hl, hr), 1]);
+    R.push([hl, centro, dist(hl, centro), 1]);
+    R.push([hr, centro, dist(hr, centro), 1]);
+    // Separadores suaves: mantienen las dos hebras abiertas, formando el lazo
+    for (let i = 1; i < n; i++) R.push([hebraIzq[i], hebraDer[i], dist(hebraIzq[i], hebraDer[i]), CFG.rigidezLazo]);
+
+    const dt = 1 / 60;
+    const g = CFG.gravedad * dt * dt;
+    const ax = hebraIzq[0].x, ay = hebraIzq[0].y;
+    let agarre = null;
+
+    function paso() {
+      for (const p of libres) {
+        if (p === centro && agarre) continue;
+        const vx = (p.x - p.px) * CFG.amortiguacion;
+        const vy = (p.y - p.py) * CFG.amortiguacion;
+        p.px = p.x; p.py = p.y;
+        p.x += vx;
+        p.y += vy + g;
+      }
+      const imCentro = centro.im;
+      if (agarre) {
+        let tx = agarre.x, ty = agarre.y;
+        const dx = tx - ax, dy = ty - ay, d = Math.hypot(dx, dy);
+        if (d > CFG.alcanceMax) { tx = ax + dx / d * CFG.alcanceMax; ty = ay + dy / d * CFG.alcanceMax; }
+        centro.px = centro.x; centro.py = centro.y;
+        centro.x += (tx - centro.x) * 0.55;
+        centro.y += (ty - centro.y) * 0.55;
+        centro.im = 0;
+      }
+      for (let it = 0; it < CFG.iteraciones; it++) {
+        for (const [a, b, d, k] of R) {
+          const dx = b.x - a.x, dy = b.y - a.y;
+          const l = Math.hypot(dx, dy) || 1e-6;
+          const w = a.im + b.im;
+          if (w === 0) continue;
+          const f = (l - d) / l * k / w;
+          a.x += dx * f * a.im; a.y += dy * f * a.im;
+          b.x -= dx * f * b.im; b.y -= dy * f * b.im;
+        }
+      }
+      centro.im = imCentro;
+    }
+
+    function energia() {
+      let m = 0;
+      for (const p of libres) m = Math.max(m, Math.abs(p.x - p.px), Math.abs(p.y - p.py));
+      return m;
+    }
+
+    // Empuje del puntero (x, y en coordenadas de referencia; vx, vy = desplazamiento por paso)
+    function empujar(x, y, vx, vy) {
+      for (const p of libres) {
+        if (p === centro && agarre) continue;
+        const dx = p.x + p.ox - x, dy = p.y + p.oy - y;
+        const d = Math.hypot(dx, dy);
+        const radio = p.esCabeza ? CFG.radioCabeza : CFG.radioCuerda;
+        if (d >= radio) continue;
+        const f = 1 - d / radio;
+        p.px -= vx * f * f * CFG.fuerzaEmpuje;
+        p.py -= vy * f * f * CFG.fuerzaEmpuje;
+      }
+    }
+
+    return {
+      n, hebraIzq, hebraDer, hl, hr, centro, libres, paso, energia, empujar,
+      agarrar(x, y) { agarre = { x, y }; },
+      mover(x, y) { if (agarre) { agarre.x = x; agarre.y = y; } },
+      soltar(vx, vy) { if (!agarre) return; agarre = null; centro.px = centro.x - vx; centro.py = centro.y - vy; },
+      get agarrado() { return !!agarre; }
+    };
+  }
+
+    /* ---------- Configuración (medida sobre la referencia) ---------- */
+    const REF_W = 782;
+    const CFG = {
+      // Posición de cada cuenta en reposo (hebra izquierda y derecha), de arriba (anillo) a abajo (cabeza)
+      nodosIzq: [[672.5,171.7],[672.1,183.2],[673.8,194.8],[676.4,205.9],[681.0,216.1],[684.2,227.1],
+                 [686.0,237.4],[685.1,247.8],[684.0,258.9],[681.3,269.8],[678.2,281.3]].map(([x, y]) => ({ x, y })),
+      nodosDer: [[680.1,172.5],[683.3,183.0],[686.5,193.4],[692.0,203.6],[695.8,213.8],[698.6,224.1],
+                 [698.7,234.2],[698.3,245.8],[696.5,256.8],[693.6,267.4],[689.5,275.9]].map(([x, y]) => ({ x, y })),
+      cabezaCentro: { x: 681.2, y: 336.9 },
+      cabezaTam: { w: 145.1, h: 142.9 },
+      masaCabeza: 0.5,        // más pesada que una cuenta
+      rigidezLazo: 0.25,      // qué tanto se mantienen abiertas las dos hebras
+      gravedad: 1800,         // px/s² (más alto = cae y se balancea más rápido)
+      amortiguacion: 0.988,   // más cerca de 1 = se balancea por más tiempo
+      iteraciones: 10,
+      alcanceMax: 172,        // hasta dónde se puede estirar al sostener la cabeza
+      radioCuerda: 30,        // alcance del mouse sobre la cuerda
+      radioCabeza: 70,        // alcance del mouse sobre la cabeza
+      fuerzaEmpuje: 0.35,     // cuánto empuja el mouse al pasar
+      // Cuentas: [semieje largo, semieje corto]
+      cuentaGris: { rx: 5.4, ry: 3.5, color: "#897c71" },
+      cuentaOliva: { rx: 6.1, ry: 3.6, color: "#524c34" }
+    };
+
+    const sim = crearSimulacion(CFG);
+    for (let i = 0; i < 2500; i++) sim.paso();      // la cuerda arranca ya en reposo
+
+    // El reposo físico no coincide exactamente con la forma de la referencia (la cuerda real
+    // está curvada): se guarda la diferencia de cada punto y se suma al dibujar.
+    const reposo = {
+      cx: sim.centro.x,
+      cy: sim.centro.y,
+      ang: Math.atan2(sim.hr.y - sim.hl.y, sim.hr.x - sim.hl.x)
+    };
+    const fijarOffsets = (hebra, refs) => hebra.forEach((p, i) => {
+      p.ox = refs[i].x - p.x;
+      p.oy = refs[i].y - p.y;
+    });
+    fijarOffsets(sim.hebraIzq, CFG.nodosIzq);
+    fijarOffsets(sim.hebraDer, CFG.nodosDer);
+    sim.centro.ox = CFG.cabezaCentro.x - sim.centro.x;
+    sim.centro.oy = CFG.cabezaCentro.y - sim.centro.y;
+
+    /* ---------- Cuentas (elipses SVG) ---------- */
+    const NS = "http://www.w3.org/2000/svg";
+    const cuentas = [];
+    [[sim.hebraIzq, 0], [sim.hebraDer, 1]].forEach(([hebra, desfase]) => {
+      hebra.forEach((punto, i) => {
+        // izquierda: pares grises · derecha: impares grises
+        const esGris = desfase === 0 ? i % 2 === 0 : i % 2 === 1;
+        const tipo = esGris ? CFG.cuentaGris : CFG.cuentaOliva;
+        const el = document.createElementNS(NS, "ellipse");
+        el.setAttribute("rx", tipo.rx);
+        el.setAttribute("ry", tipo.ry);
+        el.setAttribute("fill", tipo.color);
+        svg.appendChild(el);
+        cuentas.push({ el, hebra, i });
+      });
+    });
+
+    function dibujar() {
+      for (const { el, hebra, i } of cuentas) {
+        const p = hebra[i];
+        const a = hebra[Math.max(0, i - 1)];
+        const b = hebra[Math.min(hebra.length - 1, i + 1)];
+        const x = p.x + p.ox;
+        const y = p.y + p.oy;
+        const ang = Math.atan2((b.y + b.oy) - (a.y + a.oy), (b.x + b.ox) - (a.x + a.ox));
+        el.setAttribute(
+          "transform",
+          `translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${(ang * 180 / Math.PI).toFixed(1)})`
+        );
+      }
+      // La cabeza se desplaza y gira respecto a su posición de reposo
+      const c = sim.centro;
+      const giro = Math.atan2(sim.hr.y - sim.hl.y, sim.hr.x - sim.hl.x) - reposo.ang;
+      const mx = (c.x - reposo.cx) / CFG.cabezaTam.w * 100;
+      const my = (c.y - reposo.cy) / CFG.cabezaTam.h * 100;
+      cabeza.style.transform = `translate(${mx.toFixed(3)}%, ${my.toFixed(3)}%) rotate(${giro.toFixed(4)}rad)`;
+    }
+    dibujar();
+
+    /* ---------- Bucle (se detiene solo cuando todo está quieto) ---------- */
+    const PASO_MS = 1000 / 60;
+    let raf = 0;
+    let ultimo = 0;
+    let acumulado = 0;
+    let quieto = 0;
+    let visible = true;
+
+    function ciclo(t) {
+      raf = 0;
+      if (!visible) return;
+      acumulado += Math.min(t - ultimo, 50);
+      ultimo = t;
+      let pasos = 0;
+      while (acumulado >= PASO_MS && pasos < 4) {
+        sim.paso();
+        acumulado -= PASO_MS;
+        pasos++;
+      }
+      if (pasos === 4) acumulado = 0;
+      dibujar();
+      quieto = sim.energia() < 0.02 && !sim.agarrado ? quieto + 1 : 0;
+      if (quieto < 45) raf = requestAnimationFrame(ciclo);
+    }
+    function despertar() {
+      quieto = 0;
+      if (raf || !visible) return;
+      ultimo = performance.now();
+      acumulado = 0;
+      raf = requestAnimationFrame(ciclo);
+    }
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver((entradas) => {
+        visible = entradas[0].isIntersecting;
+        if (visible) despertar();
+      }).observe(escena);
+    }
+
+    /* ---------- Puntero ---------- */
+    const aReferencia = (e) => {
+      const r = escena.getBoundingClientRect();
+      const k = REF_W / r.width;
+      return { x: (e.clientX - r.left) * k, y: (e.clientY - r.top) * k };
+    };
+    let anterior = null;
+    let agarre = null;    // { id, dx, dy, muestras }
+
+    // Pasar el mouse por encima mueve la cuerda y la cabeza
+    escena.addEventListener("pointermove", (e) => {
+      const p = aReferencia(e);
+      const ahora = performance.now();
+      if (anterior && !sim.agarrado && !sinMovimiento && e.pointerType === "mouse") {
+        // Solo si el puntero está cerca del llavero (comprobación barata)
+        if (p.x > 630 && p.x < 770 && p.y > 130 && p.y < 430) {
+          const frames = Math.max((ahora - anterior.t) / PASO_MS, 0.5);
+          const vx = limitar((p.x - anterior.x) / frames, -9, 9);
+          const vy = limitar((p.y - anterior.y) / frames, -9, 9);
+          sim.empujar(p.x, p.y, vx, vy);
+          despertar();
+        }
+      }
+      anterior = { x: p.x, y: p.y, t: ahora };
+    });
+    escena.addEventListener("pointerleave", () => { anterior = null; });
+
+    // Sostener la cabeza
+    cabeza.addEventListener("pointerdown", (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      e.preventDefault();
+      if (cabeza.setPointerCapture) cabeza.setPointerCapture(e.pointerId);
+      const p = aReferencia(e);
+      const c = sim.centro;
+      agarre = {
+        id: e.pointerId,
+        dx: (c.x + c.ox) - p.x,       // para que la cabeza no "salte" al sostenerla
+        dy: (c.y + c.oy) - p.y,
+        muestras: [{ x: p.x, y: p.y, t: performance.now() }]
+      };
+      sim.agarrar(c.x, c.y);
+      cabeza.classList.add("agarrada");
+      despertar();
+    });
+    cabeza.addEventListener("pointermove", (e) => {
+      if (!agarre || agarre.id !== e.pointerId) return;
+      const p = aReferencia(e);
+      const c = sim.centro;
+      sim.mover(p.x + agarre.dx - c.ox, p.y + agarre.dy - c.oy);
+      agarre.muestras.push({ x: p.x, y: p.y, t: performance.now() });
+      if (agarre.muestras.length > 5) agarre.muestras.shift();
+      despertar();
+    });
+    const soltarCabeza = (e) => {
+      if (!agarre || agarre.id !== e.pointerId) return;
+      // Al soltar, conserva la velocidad del puntero (la cabeza sale lanzada)
+      const m = agarre.muestras;
+      let vx = 0, vy = 0;
+      if (m.length > 1) {
+        const a = m[0], b = m[m.length - 1];
+        const frames = Math.max((b.t - a.t) / PASO_MS, 1);
+        vx = limitar((b.x - a.x) / frames, -14, 14);
+        vy = limitar((b.y - a.y) / frames, -14, 14);
+      }
+      agarre = null;
+      cabeza.classList.remove("agarrada");
+      sim.soltar(vx, vy);
+      despertar();
+    };
+    cabeza.addEventListener("pointerup", soltarCabeza);
+    cabeza.addEventListener("pointercancel", soltarCabeza);
+    cabeza.addEventListener("lostpointercapture", soltarCabeza);
+  })();
 })();

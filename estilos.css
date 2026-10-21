@@ -1180,6 +1180,226 @@ body {
     animation: none !important;
   }
 }
+
+/* ==================== SECCIÓN 5: VISOR 3D ====================
+   Medidas tomadas de la imagen de referencia (782 x 816). Todo está en % del escenario
+   (o en cqw, 1cqw = 1% de su ancho), así que escala igual en cualquier pantalla.
+   Para hacer toda la sección más angosta: .visor-escena { width: 80%; margin: 0 auto; }
+*/
+.seccion-cinco {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.visor-escena {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 782 / 816;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.visor-escena img,
+.visor-escena .visor-halftono {
+  position: absolute;
+  display: block;
+  max-width: none;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+/* Fondo punteado (dos círculos de semitono) */
+.visor-halftono {
+  z-index: 0;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background-color: #e8dabd;
+  background-image: radial-gradient(circle, #e0cca7 0 36%, transparent 42%);
+  background-size: .384cqw .384cqw;
+}
+.visor-halftono-uno { left: -14.32%; top: -8.33%; width: 42.2%; }
+.visor-halftono-dos { left: 37.6%;   top: 49.51%; width: 74.17%; }
+/* Capas (de abajo a arriba): letras 1 < dispositivo 2 < teléfono 3 < pantalla 4 < controles 5 < sticker 6 < llavero 7-8 */
+.visor-tres { z-index: 1; left: 17.39%; top: 8.09%;  width: 16.73%; }
+.visor-de   { z-index: 1; left: 15.47%; top: 38.6%;  width: 21.12%; }
+.visor-dispositivo { z-index: 2; left: 10.23%; top: 62.38%; width: 24.42%; }
+.visor-telefono { z-index: 3; left: 33.5%; top: 1.84%; width: 55.43%; }
+/* Pantalla: aquí irá el modelo 3D (mismo giro que el teléfono) */
+.visor-pantalla {
+  position: absolute;
+  z-index: 4;
+  left: 40.61%;
+  top: 14.66%;
+  width: 38.72%;
+  height: 58.02%;
+  rotate: 6.8deg;
+  background: #524c34;
+  border-radius: 2.7cqw;
+  overflow: hidden;
+}
+/* ---------- Controles ---------- */
+.visor-controles {
+  position: absolute;
+  z-index: 5;
+  left: 34.26%;
+  top: 74.26%;
+  width: 37.42%;
+}
+.controles-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+/* Cada botón se hunde al presionarlo y rebota al soltarlo */
+.ctl-btn {
+  cursor: pointer;
+  transform-box: fill-box;
+  transform-origin: center;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .6s cubic-bezier(.3, 2.2, .45, 1), filter .35s ease;
+}
+.ctl-btn.presionado {
+  transform: translateY(4px) scale(.87);
+  filter: brightness(.84);
+  transition: transform .06s ease-out, filter .06s ease-out;
+}
+/* Los lados del pad direccional se hunden hacia el centro */
+#btn-izq.presionado { transform: translate(2.5px, 1px) scale(.9); }
+#btn-der.presionado { transform: translate(-2.5px, 1px) scale(.9); }
+.ctl-btn:focus-visible {
+  filter: drop-shadow(0 0 3px #e5a667) drop-shadow(0 0 1px #e5a667);
+}
+/* ---------- Sticker con efecto peel ----------
+   El JS pone --W, --H y --S (px), --a (dirección del despegue) y --P (posición del doblez).
+   El marco gira para que el doblez sea una línea vertical; la imagen se contragira para verse recta. */
+.sticker-peel {
+  position: absolute;
+  z-index: 6;
+  left: 35.77%;
+  top: 72.46%;
+  width: 11.13%;
+  aspect-ratio: 219 / 203.5;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  --a: -135deg;
+  --P: 0px;
+}
+.sticker-peel.agarrado { cursor: grabbing; }
+.sp-marco {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--S, 0px);
+  height: var(--S, 0px);
+  margin: calc(var(--S, 0px) / -2) 0 0 calc(var(--S, 0px) / -2);
+  transform: rotate(var(--a));
+  pointer-events: none;
+}
+.sp-base,
+.sp-reverso { position: absolute; inset: 0; }
+.sp-recorte { position: absolute; inset: 0; }
+.sticker-peel .sp-img {
+  position: absolute;
+  display: block;
+  left: 50%;
+  top: 50%;
+  width: var(--W, 0px);
+  height: var(--H, 0px);
+  max-width: none;
+  margin: calc(var(--H, 0px) / -2) 0 0 calc(var(--W, 0px) / -2);
+  transform: rotate(calc(var(--a) * -1));
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+/* Lo que sigue pegado: desde el doblez hacia el resto del sticker */
+.sp-base { filter: drop-shadow(0 0 .25cqw rgba(52, 43, 34, .3)); }
+.sp-recorte-base { clip-path: inset(0 0 0 var(--P)); }
+/* Lo despegado: se refleja sobre el doblez y muestra el reverso (crema) con sombra */
+.sp-reverso {
+  transform: translateX(calc(var(--P) * 2)) scaleX(-1);
+  transform-origin: 0 0;
+  filter: drop-shadow(0 0 .3cqw rgba(52, 43, 34, .38));
+}
+.sp-recorte-reverso { clip-path: inset(0 calc(100% - var(--P)) 0 0); }
+.sticker-peel .sp-img-reverso {
+  filter: brightness(0) invert(1);   /* respaldo si no hay filtro SVG */
+  filter: url(#tinte-reverso);
+}
+/* Sombreado del reverso: más oscuro cerca del doblez */
+.sp-sombra {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent calc(var(--P) - var(--W, 0px) * .5), rgba(0, 0, 0, .34) var(--P));
+  mask-image: linear-gradient(90deg, transparent calc(var(--P) - var(--W, 0px) * .5), rgba(0, 0, 0, .34) var(--P));
+}
+.sticker-peel .sp-img-sombra {
+  filter: brightness(0);             /* respaldo */
+  filter: url(#tinte-sombra);
+}
+/* ---------- Llavero ---------- */
+.visor-escena .llavero-cabeza {
+  z-index: 7;
+  left: 77.84%;
+  top: 32.54%;
+  width: 18.55%;
+  transform-origin: center;
+  will-change: transform;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+}
+.visor-escena .llavero-cabeza.agarrada { cursor: grabbing; }
+.llavero-cuerda {
+  position: absolute;
+  z-index: 8;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+/* ---------- Pantalla del visor 3D: cielo oscuro con resplandor en el horizonte ----------
+   --horizonte lo actualiza visor3d.js según la cámara. El lienzo 3D es transparente
+   y se dibuja encima de este degradado. */
+.visor-pantalla {
+  --horizonte: 62%;
+  background:
+    linear-gradient(180deg,
+      transparent calc(var(--horizonte) - 10%),
+      rgba(102, 102, 58, .22) var(--horizonte),
+      transparent calc(var(--horizonte) + 8%)),
+    linear-gradient(180deg,
+      #1b1611 0%,
+      #2a231b calc(var(--horizonte) - 2%),
+      #342b22 var(--horizonte),
+      #211b15 100%);
+}
+.visor-pantalla canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.visor-mensaje {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: 4cqw;
+  box-sizing: border-box;
+  text-align: center;
+  font-family: var(--fuente-principal, sans-serif);
+  font-size: 2.1cqw;
+  line-height: 1.2;
+  color: #ede1c9;
+  pointer-events: none;
+}
+
 /* ==================== ANIMACIONES ==================== */
 @keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
 @keyframes recorrer { to { transform: translateX(-50%); } }

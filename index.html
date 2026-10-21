@@ -433,9 +433,96 @@
     <p id="proyecto-estado" class="solo-lectura" role="status" aria-live="polite"></p>
   </section>
   <!-- ==================== FIN SECCIÓN 4 ==================== -->
+
+<!-- ==================== INICIO SECCIÓN 5: VISOR 3D ==================== -->
+<section id="seccion-cinco" class="seccion-cinco" aria-label="Visor 3D">
+  <h2 class="solo-lectura">Visor 3D</h2>
+
+  <!-- Filtros (no dibujan nada): tiñen las siluetas del reverso y la sombra del sticker -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <filter id="tinte-reverso" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="0 0 0 0 0.9137  0 0 0 0 0.8745  0 0 0 0 0.8039  0 0 0 1 0" />
+    </filter>
+    <filter id="tinte-sombra" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="0 0 0 0 0.2039  0 0 0 0 0.1686  0 0 0 0 0.1333  0 0 0 1 0" />
+    </filter>
+  </svg>
+
+  <div class="visor-escena" id="visor-escena">
+    <!-- Fondo punteado -->
+    <span class="visor-halftono visor-halftono-uno" aria-hidden="true"></span>
+    <span class="visor-halftono visor-halftono-dos" aria-hidden="true"></span>
+
+    <!-- Letras "3" y "D" -->
+    <img class="visor-letra visor-tres" src="imagenes/Tres.svg" alt="" aria-hidden="true" draggable="false" />
+    <img class="visor-letra visor-de" src="imagenes/De.svg" alt="" aria-hidden="true" draggable="false" />
+
+    <!-- Dispositivo azul (reemplázalo por tu propio SVG con el mismo nombre si quieres) -->
+    <img class="visor-dispositivo" src="imagenes/Tamagotchi.json" alt="" aria-hidden="true" draggable="false" />
+
+    <!-- Teléfono y su pantalla (aquí irá el modelo 3D) -->
+    <img class="visor-telefono" src="imagenes/Telefono.svg" alt="" aria-hidden="true" draggable="false" />
+    <div class="visor-pantalla" id="visor-3d" role="img" aria-label="Pantalla del visor 3D"></div>
+
+    <!-- Controles: izquierda, derecha, más y menos (cada uno se hunde al presionarlo) -->
+    <div class="visor-controles">
+      <svg class="controles-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 688.47 229.05" aria-label="Controles del visor">
+        <g id="ctl-base"><path fill="#72665b" d="M478.42,41.43c-29.23,24.63-58.46,49.28-87.69,73.91l72.33,87.24-.34.28c-47.59,39.45-119.31,33.74-160.32-13.07-.2-.22-.38-.44-.58-.65,29.45-24.83,58.91-49.64,88.35-74.47l-73.51-88.66c48.39-39.81,120.87-33.14,161.2,14.76.07.07.13.14.2.22l.37.46h0Z"/></g>
+        <g class="ctl-btn" id="btn-mas" data-accion="mas" role="button" tabindex="0" aria-label="Acercar">
+          <circle fill="#524c34" cx="649.95" cy="71.18" r="38.52"/>
+          <path fill="#897c71" d="M679.95,76.3c-.53,4.45-4.31,7.71-8.68,7.71-.35,0-.7-.02-1.05-.06l-12.17-1.45-1.45,12.17c-.58,4.8-4.93,8.22-9.73,7.65-4.81-.57-8.23-4.93-7.66-9.73l1.45-12.17-13.9-1.66c-4.8-.58-8.23-4.93-7.66-9.73.58-4.8,4.93-8.23,9.73-7.66l13.91,1.66,1.66-13.9c.58-4.81,4.93-8.23,9.73-7.66,4.46.53,7.72,4.31,7.72,8.68,0,.35-.02.7-.06,1.05l-1.66,13.91,12.17,1.45c4.8.58,8.22,4.93,7.65,9.74Z"/>
+        </g>
+        <g class="ctl-btn" id="btn-menos" data-accion="menos" role="button" tabindex="0" aria-label="Alejar">
+          <circle fill="#524c34" cx="638.94" cy="163.32" r="38.52"/>
+          <rect fill="#897c71" x="630.79" y="134.48" width="17.51" height="61.28" rx="8.75" ry="8.75" transform="translate(879.36 -450.32) rotate(96.81)"/>
+        </g>
+        <g class="ctl-btn" id="btn-izq" data-accion="izquierda" role="button" tabindex="0" aria-label="Girar a la izquierda">
+          <path fill="#897c71" d="M301.82,189.13c.2.22.38.44.58.65t-.02.02c-.37-.43-.77-.91-1.2-1.43-28.99-34.96-23.82-84.89-23.82-84.89,4.36-43.71,31.73-70.53,38.97-77.21.12-.09.23-.19.34-.28l73.51,88.66c-29.44,24.83-58.9,49.64-88.35,74.47Z"/>
+          <path fill="#4f4740" d="M322.82,81.16c-8.55,5.82-17.1,11.63-25.65,17.45-4.21,2.86-7.33,9.52-3.73,14.23,6.35,8.32,12.7,16.65,19.06,24.97,3.4,4.46,8.96,6.81,14.23,3.73,4.39-2.57,7.16-9.74,3.73-14.23-6.35-8.32-12.7-16.65-19.06-24.97l-3.73,14.23c8.55-5.82,17.1-11.63,25.65-17.45,4.64-3.16,6.7-9.15,3.73-14.23-2.69-4.6-9.56-6.91-14.23-3.73h0Z"/>
+        </g>
+        <g class="ctl-btn" id="btn-der" data-accion="derecha" role="button" tabindex="0" aria-label="Girar a la derecha">
+          <path fill="#897c71" d="M463.06,202.58c-24.39-29.18-48.77-58.35-73.15-87.53,29.32-24.76,58.64-49.53,87.95-74.29.07.07.13.14.2.22.12.15.25.3.36.46,39.53,48.78,32.45,121.19-15.36,161.14Z"/>
+          <path fill="#4f4740" d="M446.32,108.8c6.94,7.67,13.88,15.33,20.82,23v-14.71c-8.13,6.59-16.27,13.19-24.4,19.78-4.37,3.54-3.68,11.03,0,14.71,4.32,4.32,10.33,3.55,14.71,0,8.13-6.59,16.27-13.19,24.4-19.78,4.52-3.66,3.45-10.9,0-14.71-6.94-7.67-13.88-15.33-20.82-23-9-9.95-23.68,4.8-14.71,14.71h0Z"/>
+        </g>
+        <g id="ctl-centro"><circle fill="#524c34" cx="389.6" cy="117.66" r="38.52"/></g>
+      </svg>
+    </div>
+
+    <!-- Sticker de la flor, con efecto de despegue (peel) -->
+    <div class="sticker-peel" id="sticker-flor" aria-hidden="true">
+      <div class="sp-marco">
+        <div class="sp-base"><div class="sp-recorte sp-recorte-base">
+          <img class="sp-img" src="imagenes/Sticker_Flor.svg" alt="" draggable="false" />
+        </div></div>
+        <div class="sp-reverso"><div class="sp-recorte sp-recorte-reverso">
+          <img class="sp-img sp-img-reverso" src="imagenes/Sticker_Flor.svg" alt="" draggable="false" />
+          <div class="sp-sombra"><img class="sp-img sp-img-sombra" src="imagenes/Sticker_Flor.svg" alt="" draggable="false" /></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- Llavero: cabeza (se puede sostener) y cuerda de cuentas con física -->
+    <img class="llavero-cabeza" id="llavero-cabeza" src="imagenes/Llavero.svg" alt="Llavero" draggable="false" />
+    <svg class="llavero-cuerda" id="llavero-cuerda" viewBox="0 0 782 816" aria-hidden="true"></svg>
+  </div>
+</section>
+<!-- ==================== FIN SECCIÓN 5 ==================== -->
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
   <script src="interacciones.js"></script>
+
+  <!-- Visor 3D: ponlo al final del <body>, junto a tus otros <script> -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="visor3d.js"></script>
+
 </body>
 </html>
