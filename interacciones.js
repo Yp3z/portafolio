@@ -890,53 +890,119 @@
     iniciarTablero();
   }
 })();
+
+
 /* ==================== SECCIÓN 4: PROYECTOS ==================== */
 (() => {
   "use strict";
+
   /* ------------------------------------------------------------------
      CONTENIDO DE LOS PROYECTOS
-     Para cambiar un proyecto edita su bloque. Por ahora los 3 son iguales.
-       logo   : imagen del logo (arrastrable)
-       fotos  : 3 imágenes, se muestran en los 3 marcos
-       titulo : encabezado de la hoja
-       texto  : descripción de la hoja
-       redes  : iconos (icono, url, nombre)
+       logo    : imagen del logo (arrastrable)
+       fotos   : 3 imágenes, se muestran en los 3 marcos
+       titulo  : encabezado de la hoja (vacío = sin título)
+       texto   : descripción de la hoja
+       redes   : iconos (icono, url, nombre). [] = sin iconos
+       colores : imagen con la paleta de colores (opcional)
      ------------------------------------------------------------------ */
   const PROYECTO_BASE = {
     nombre: "Proyecto",
     logo: "imagenes/TT Logo.svg",
     fotos: ["imagenes/foto1.jpg", "imagenes/foto2.jpg", "imagenes/foto3.jpg"],
-    titulo: "",   // déjalo vacío para no mostrar título (como en la referencia)
-    texto:
-      "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy " +
-      "nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi " +
-      "enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis " +
-      "nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in " +
-      "hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla",
-    redes: [
-      { icono: "imagenes/Insta Icon.svg",  url: "#", nombre: "Instagram" },
-      { icono: "imagenes/Tiktok Icon.svg", url: "#", nombre: "TikTok" }
-    ]
+    titulo: "",
+    texto: "",
+    redes: [],
+    colores: ""
   };
+
   const PROYECTOS = [
-    { ...PROYECTO_BASE, nombre: "Proyecto 1" },   // ← reemplaza con el proyecto 1
-    { ...PROYECTO_BASE, nombre: "Proyecto 2" },   // ← reemplaza con el proyecto 2
-    { ...PROYECTO_BASE, nombre: "Proyecto 3" }    // ← reemplaza con el proyecto 3
+    /* ---------- Proyecto 1 ---------- */
+    {
+      ...PROYECTO_BASE,
+      nombre: "Tiny Treats",
+      logo: "imagenes/TT Logo.svg",
+      fotos: ["imagenes/TT1.jpg", "imagenes/TT2.jpg", "imagenes/TT3.jpg"],
+      texto:
+        "Proyecto de mini empresa especializada en la creación de minipasteles, que combinan diseño y sabor en un formato pequeño pero delicioso, ideal para pequeñas reuniones o celebraciones privadas. Elaborado como proyecto final del Técnico.",
+      redes: [
+        { icono: "imagenes/Web Icon.svg",   url: "https://tinytr3ats.wixsite.com/tiny-treats", nombre: "Sitio web" },   // ← pon aquí la URL de la web
+        { icono: "imagenes/Insta Icon.svg", url: "https://www.instagram.com/tinytreats_co/", nombre: "Instagram" }
+      ],
+      colores: "imagenes/Colores.svg"   // ← cámbialo si el proyecto 1 tiene su propio archivo (ej. ColoresTT.svg)
+    },
+
+    /* ---------- Proyecto 2 ---------- */
+    {
+      ...PROYECTO_BASE,
+      nombre: "Inlec",
+      logo: "imagenes/InlecLogo.png",   // ← pon aquí el logo de Inlec
+      fotos: ["imagenes/Inlec1.mp4", "imagenes/Inlec2.jpg", "imagenes/Inlec3.jpg"],
+      texto:
+        "Inlec es una plataforma que busca transformar la experiencia de lectura en niños y adolescentes que han perdido la motivación, especialmente dentro del entorno escolar. Aquí se trata de volver a conectar emocionalmente con las historias, usando formatos más cercanos como la animación, el sonido y las ilustraciones.",
+      redes: [
+        { icono: "imagenes/Web Icon.svg",    url: "https://inlec-main.vercel.app/", nombre: "Sitio web" },  // ← URLs pendientes
+        { icono: "imagenes/Insta Icon.svg",  url: "https://www.instagram.com/inlec.co/", nombre: "Instagram" },
+        { icono: "imagenes/Tiktok Icon.svg", url: "https://www.tiktok.com/@inlec1", nombre: "TikTok" }
+      ],
+      colores: "imagenes/ColoresInlec.svg"
+    },
+
+    /* ---------- Proyecto 3 ---------- */
+    {
+      ...PROYECTO_BASE,
+      nombre: "Marketing Emocional",
+      logo: "imagenes/LegoLogo.png",
+      fotos: ["imagenes/Lego1.png", "imagenes/Lego2.png", "imagenes/Lego3.png"],
+      texto:
+        "Recreación de publicaciones al estilo de la marca LEGO®, utilizando el marketing emocional para generar en el público sentimientos de pertenencia, nostalgia, felicidad, etc.",
+      redes: [],   // sin iconos
+      colores: "imagenes/ColoresLego.svg"
+    }
   ];
   /* ------------------------------------------------------------------ */
+
+  /* Texto de la hoja: justificado, última línea centrada y todo el
+     bloque centrado dentro del SVG de la hoja. */
+  const estilo = document.createElement("style");
+  estilo.textContent = `
+    .p-foto video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .p-hoja-texto {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .p-hoja-texto p {
+      text-align: justify;
+      text-align-last: center;
+      margin-inline: auto;
+    }
+  `;
+  document.head.appendChild(estilo);
+
   const contenedor = document.getElementById("proyecto-contenido");
   const anterior = document.getElementById("proyecto-anterior");
   const siguiente = document.getElementById("proyecto-siguiente");
   const estado = document.getElementById("proyecto-estado");
+  const coloresEl = document.querySelector("#proyectos-tablero .proyectos-colores");
+
   if (!contenedor || !anterior || !siguiente) {
     console.warn("Sección 4: faltan elementos en el HTML.");
     return;
   }
+
   let actual = 0;
   let ocupado = false;
+
   const hayGsap = () => typeof window.gsap !== "undefined";
   const sinMovimiento = () =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   // Rebote suave al pulsar (flechas e iconos de redes)
   function rebotar(el) {
     el.classList.remove("rebota");
@@ -944,11 +1010,13 @@
     el.classList.add("rebota");
     el.addEventListener("animationend", () => el.classList.remove("rebota"), { once: true });
   }
+
   // Logo arrastrable: vuelve a su punto al soltarlo
   function activarArrastre(el) {
     let id = null;
     let x0 = 0;
     let y0 = 0;
+
     el.addEventListener("pointerdown", ev => {
       if (ocupado) return;
       id = ev.pointerId;
@@ -959,6 +1027,7 @@
       if (hayGsap()) gsap.killTweensOf(el);
       ev.preventDefault();
     });
+
     el.addEventListener("pointermove", ev => {
       if (ev.pointerId !== id) return;
       const dx = ev.clientX - x0;
@@ -966,6 +1035,7 @@
       if (hayGsap()) gsap.set(el, { x: dx, y: dy });
       else el.style.translate = `${dx}px ${dy}px`;
     });
+
     const soltar = ev => {
       if (ev.pointerId !== id) return;
       id = null;
@@ -976,20 +1046,24 @@
         el.style.translate = "";
       }
     };
+
     el.addEventListener("pointerup", soltar);
     el.addEventListener("pointercancel", soltar);
     el.addEventListener("dragstart", ev => ev.preventDefault());
   }
+
   function crear(tag, clase, atributos = {}) {
     const el = document.createElement(tag);
     if (clase) el.className = clase;
     Object.entries(atributos).forEach(([k, v]) => el.setAttribute(k, v));
     return el;
   }
+
   // Dibuja un proyecto dentro del contenedor.
   function montar(indice) {
     const p = PROYECTOS[indice];
     const nodos = [];
+
     const logo = crear("img", "p-logo", {
       src: p.logo,
       alt: `Logo de ${p.nombre}`,
@@ -997,25 +1071,46 @@
     });
     activarArrastre(logo);
     nodos.push(logo);
+
     p.fotos.slice(0, 3).forEach((src, i) => {
       const marco = crear("figure", `p-foto p-foto-${i + 1}`);
-      const img = crear("img", "", {
-        src,
-        alt: `Foto ${i + 1} de ${p.nombre}`,
-        loading: "lazy",
-        draggable: "false"
-      });
-      // Si la foto aún no existe, el marco se queda vacío con su borde.
-      img.addEventListener("error", () => { img.style.visibility = "hidden"; });
-      marco.appendChild(img);
+      const esVideo = /\.(mp4|webm|mov)$/i.test(src);
+      let medio;
+      if (esVideo) {
+        // Video: se reproduce solo, sin sonido y en bucle (así los navegadores lo permiten)
+        medio = crear("video", "", {
+          src,
+          "aria-label": `Video ${i + 1} de ${p.nombre}`,
+          muted: "",
+          loop: "",
+          autoplay: "",
+          playsinline: "",
+          preload: "metadata",
+          draggable: "false"
+        });
+        medio.muted = true; // algunos navegadores exigen la propiedad, no solo el atributo
+        medio.play().catch(() => {});
+      } else {
+        medio = crear("img", "", {
+          src,
+          alt: `Foto ${i + 1} de ${p.nombre}`,
+          loading: "lazy",
+          draggable: "false"
+        });
+      }
+      // Si el archivo aún no existe, el marco se queda vacío con su borde.
+      medio.addEventListener("error", () => { medio.style.visibility = "hidden"; });
+      marco.appendChild(medio);
       nodos.push(marco);
     });
+
     const hoja = crear("div", "p-hoja");
     hoja.appendChild(crear("img", "p-hoja-fondo", {
       src: "imagenes/Hoja Info.svg",
       alt: "",
       "aria-hidden": "true"
     }));
+
     const texto = crear("div", "p-hoja-texto");
     if (p.titulo) {
       const h3 = crear("h3");
@@ -1027,37 +1122,58 @@
     texto.appendChild(parrafo);
     hoja.appendChild(texto);
     nodos.push(hoja);
-    const redes = crear("div", "p-redes");
-    p.redes.forEach(r => {
-      const a = crear("a", "p-red", { href: r.url, "aria-label": r.nombre });
-      if (/^https?:/i.test(r.url)) {
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
+
+    // Iconos de redes (si el proyecto no tiene, no se dibuja el bloque)
+    if (p.redes.length) {
+      const redes = crear("div", "p-redes");
+      p.redes.forEach(r => {
+        const a = crear("a", "p-red", { href: r.url, "aria-label": r.nombre });
+        if (/^https?:/i.test(r.url)) {
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+        }
+        a.appendChild(crear("img", "", { src: r.icono, alt: "", draggable: "false" }));
+        redes.appendChild(a);
+      });
+      nodos.push(redes);
+    }
+
+    // Paleta de colores: es la imagen fija .proyectos-colores del HTML,
+    // a la que se le cambia el src según el proyecto.
+    if (coloresEl) {
+      if (p.colores) {
+        coloresEl.src = p.colores;
+        coloresEl.style.visibility = "";
+      } else {
+        coloresEl.style.visibility = "hidden";
       }
-      a.appendChild(crear("img", "", { src: r.icono, alt: "", draggable: "false" }));
-      redes.appendChild(a);
-    });
-    nodos.push(redes);
+    }
+
     contenedor.replaceChildren(...nodos);
     actual = indice;
     if (estado) estado.textContent = `${p.nombre}, ${indice + 1} de ${PROYECTOS.length}`;
     return nodos;
   }
+
   /* Transición "borrador": lo viejo se borra con un barrido y lo nuevo
      se descubre con otro, objeto por objeto. */
   function ir(delta) {
     if (ocupado) return;
     const destino = (actual + delta + PROYECTOS.length) % PROYECTOS.length;
+
     if (!hayGsap() || sinMovimiento()) {
       montar(destino);
       return;
     }
+
     ocupado = true;
     const adelante = delta > 0;
     const visible = "inset(0% 0% 0% 0%)";
     const borrado = adelante ? "inset(0% 100% 0% 0%)" : "inset(0% 0% 0% 100%)";
     const oculto = adelante ? "inset(0% 0% 0% 100%)" : "inset(0% 100% 0% 0%)";
-    const viejos = [...contenedor.children];
+    // La paleta de colores también hace el barrido junto con el resto
+    const viejos = [...contenedor.children, ...(coloresEl ? [coloresEl] : [])];
+
     gsap.fromTo(
       viejos,
       { clipPath: visible, opacity: 1 },
@@ -1068,7 +1184,7 @@
         ease: "power2.in",
         stagger: 0.06,
         onComplete() {
-          const nuevos = montar(destino);
+          const nuevos = [...montar(destino), ...(coloresEl ? [coloresEl] : [])];
           gsap.fromTo(
             nuevos,
             { clipPath: oculto, opacity: 0 },
@@ -1086,8 +1202,10 @@
       }
     );
   }
+
   anterior.addEventListener("click", () => { rebotar(anterior); ir(-1); });
   siguiente.addEventListener("click", () => { rebotar(siguiente); ir(1); });
+
   // Iconos de redes: rebote suave al presionar
   contenedor.addEventListener("click", ev => {
     const red = ev.target.closest(".p-red");
@@ -1095,8 +1213,10 @@
     rebotar(red);
     if (red.getAttribute("href") === "#") ev.preventDefault();
   });
+
   montar(0);
 })();
+
 
 /* ==================== SECCIÓN 5: VISOR 3D ==================== */
 (() => {

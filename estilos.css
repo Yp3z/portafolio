@@ -152,9 +152,9 @@ body {
 .presentacion {
   position: absolute;
   z-index: 6;
-  left: 17.3%;
+  left: 20%;
   top: 45%;
-  width: 30%;
+  width: 25%;
   padding: 20px 15px;
   border: 4px solid var(--verde);
   border-radius: 20px;
@@ -164,7 +164,7 @@ body {
 .presentacion p {
   margin: 0;
   font-family: var(--fuente-principal);
-  font-size: clamp(16px, 1.4vw, 14px);
+  font-size: clamp(20px, 1.4vw, 14px);
   line-height: 1.12;
   font-weight: 700;
   text-align: justify;
@@ -480,9 +480,9 @@ body {
 .texto-sobre-mi {
   margin: 0;
   font-family: var(--fuente-principal);
-  font-size: max(10px, 1.4vw);
+  font-size: max(13px, 1.4vw);
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.20;
   text-align: justify;
   text-align-last: center;
   color: var(--negro);
@@ -993,7 +993,7 @@ body {
   height: auto;
   pointer-events: none;
 }
-/* La rata: encima del tablero, sin animación propia */ñ
+/* La rata: encima del tablero, sin animación propia */
 .proyectos-rata {
   position: absolute;
   z-index: 6;
@@ -1202,14 +1202,19 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
+  overflow: clip;   /* ← NUEVO: recorta los círculos punteados en los bordes de la sección */
 }
+
 .visor-escena {
+  --alto-max: calc(100vh - 24px);                       /* ← alto máximo = alto de la pantalla */
   position: relative;
-  width: 100%;
+  width: min(100%, calc(var(--alto-max) * 782 / 816));  /* ← el ancho se limita según ese alto */
+  margin: 0 auto;                                       /* ← centrado */
   aspect-ratio: 782 / 816;
   container-type: inline-size;
-  overflow: hidden;
+  overflow: visible;                                    /* ← antes: hidden */
 }
+
 .visor-escena img,
 .visor-escena .visor-halftono {
   position: absolute;

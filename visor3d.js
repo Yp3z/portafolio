@@ -17,8 +17,8 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 const MODELO = "imagenes/LowPoly.glb";
 
 const COLORES = {
-  verde: "#66663a",        // líneas de la cuadrícula (tu verde)
-  verdeClaro: "#8a8a4e",   // líneas principales (cada 5 celdas)
+  verde: "#a6a665",        // líneas de la cuadrícula
+  verdeClaro: "#d3cf9f",   // líneas principales (cada 5 celdas)
   crema: "#ede1c9",        // estrellas y luz
   sombra: "rgba(26, 20, 14, "
 };
@@ -49,6 +49,7 @@ const PIXELADO = {
   activo: true,
   columnas: 500        // ancho del render en píxeles (menos = píxeles más grandes)
 };
+
 
 const CUADRICULA = { celda: 0.8, grosor: 1.4, grosorPixel: 1.2, cerca: 7, lejos: 60 };
 const ESTRELLAS = { cantidad: 1200, radio: 180 };
@@ -98,8 +99,8 @@ function crearControl(cfg, vista) {
  * tu verde oliva) y se tramean con una matriz Bayer 4x4 entre tonos vecinos.
  * ------------------------------------------------------------------ */
 const PALETA_CIELO = [
-  [20, 16, 12], [27, 22, 17], [36, 30, 23], [42, 35, 27],
-  [52, 43, 34], [66, 60, 40], [82, 76, 52], [102, 102, 58]
+  [58, 54, 38], [70, 65, 45], [82, 76, 52], [92, 89, 55],
+  [102, 102, 58], [116, 115, 66], [128, 127, 72], [140, 140, 80]
 ];
 const BAYER4 = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
 
@@ -121,12 +122,12 @@ function posicionEnPaleta(col) {
 function pintarCielo(datos, w, h, horizonte) {
   // [posición, color]: arriba → horizonte → suelo
   const paradas = [
-    [0, [27, 22, 17]],
-    [Math.max(0.01, horizonte - 0.02), [42, 35, 27]],
-    [horizonte, [52, 43, 34]],
-    [1, [33, 27, 21]]
+    [0, [62, 57, 41]],
+    [Math.max(0.01, horizonte - 0.02), [88, 84, 54]],
+    [horizonte, [100, 98, 58]],
+    [1, [66, 61, 43]]
   ];
-  const verde = [102, 102, 58];
+  const verde = [140, 140, 80];
   const max = PALETA_CIELO.length - 1;
   for (let y = 0; y < h; y++) {
     const t = (y + 0.5) / h;
